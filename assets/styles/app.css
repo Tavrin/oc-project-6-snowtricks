@@ -1,0 +1,71 @@
+.header {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 80%;
+}
+
+.navbar {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.navbar .nav-item{
+    padding-right: 1rem;
+}
+
+.top-link {
+    font-weight: 800;
+}
+
+.trick-item {
+    width: 15rem;
+    height: 15rem;
+    display: flex;
+    flex-direction: column;
+    margin: 1.5rem;
+    padding: 1rem;
+    border-radius: 5px;
+    position: relative;
+    background-color: #fff;
+    box-shadow: 0 2px 9px -2px #b2b2b2;
+}
+
+#landing-zone {
+    text-align: center;
+    background-image: url("../images/snowboard-2.jpg");
+    background-size: cover;
+    height: 60vh;
+    padding-top: 15%;
+    margin-bottom: 4rem;
+}
+
+#landing-zone-text *{
+    color: black;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+#tricks-zone {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 4rem;
+}
+
+#logo {
+    font-weight: 900;
+    font-size: 2rem;
+}
+
+#security-form {
+    display: flex;
+    flex-direction: column;
+    width:30%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 4rem;
+}

@@ -15,10 +15,10 @@ class IndexController extends AbstractController
     public function index(): Response
     {
         $trickRepository = $this->getDoctrine()->getRepository(Trick::class);
-        $tricks = $trickRepository->findAll();
+        $content['tricks'] = $trickRepository->findAll();
         return $this->render('index/index.html.twig', [
             'controller_name' => 'IndexController',
-            'content' => $tricks
+            'content' => $content
         ]);
     }
 }
