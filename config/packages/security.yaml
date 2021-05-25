@@ -36,6 +36,5 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/tricks/new, roles: ROLE_USER }
-        - { path: ^/tricks/^/edit, roles: ROLE_USER }
 
         # - { path: ^/profile, roles: ROLE_USER }

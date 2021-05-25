@@ -13,6 +13,12 @@
                 <a href="/#tricks-zone" class="top-link">Tricks</a>
             </li>
             {% if app.user is defined and app.user is not empty %}
+                <li class="nav-item">
+                    <a href="#" id="userDropdown"><i class="fas fa-user"></i></a>
+                    <ul class="dropdown header" id="userDropdownLinks">
+                        <li><a href="/logout" class="">Déconnexion</a></li>
+                    </ul>
+                </li>
             {% else %}
             <li class="nav-item">
                 <a href="/login" class="top-link">Connexion</a>

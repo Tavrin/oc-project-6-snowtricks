@@ -59,6 +59,11 @@ class Trick
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Media::class)
+     */
+    private $mainMedia;
+
     public function __construct()
     {
         $this->trickMedia = new ArrayCollection();
@@ -217,6 +222,18 @@ class Trick
                 $comment->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMainMedia(): ?Media
+    {
+        return $this->mainMedia;
+    }
+
+    public function setMainMedia(?Media $mainMedia): self
+    {
+        $this->mainMedia = $mainMedia;
 
         return $this;
     }

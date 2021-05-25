@@ -11,14 +11,18 @@
         </div>
     </div>
     <section id="tricks-zone">
+        <h2 class="zone-title">Les figures</h2>
     {% if content.tricks is defined and content.tricks is not empty %}
-        {% for trick in content.tricks %}
-            <div class="trick-item">
-                <p>
-                    {{ trick.name }}
-                </p>
-            </div>
-        {% endfor %}
+        <div class="tricks-listing-grid">
+            {% for trick in content.tricks %}
+                <div class="trick-item">
+                    <div class="featured-item-image">
+                        {% include'/partials/inc/listing_media.html.twig' %}
+                    </div>
+                    <span class="trick-item-info"><a href="/tricks/{{ trick.id }}">{{ trick.name }}</a> {% if app.user %}<span><a href="/tricks/{{ trick.id }}/edit"><i class="fas fa-pen"></i></a> {% if is_granted('ROLE_ADMIN') %}<i class="fas fa-trash"></i>{% endif %}</span>{% endif %}</span>
+                </div>
+            {% endfor %}
+        </div>
     {% else %}
         <h2 style="text-align:center">Il n'existe encore pas de figure</h2>
     {% endif %}

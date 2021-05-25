@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
+use App\Form\TrickFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,40 +14,39 @@ class TrickController extends AbstractController
     /**
      * @Route("/tricks/{id}", name="trick_show")
      */
-    public function index(int $id): Response
+    public function index(Trick $trick): Response
     {
-        $trickRepository = $this->getDoctrine()->getRepository(Trick::class);
-        $trick = $trickRepository->findOneBy(['id' => $id]);
-        dd($trick);
         return $this->render('trick/index.html.twig', [
             'controller_name' => 'TrickController',
         ]);
     }
 
     /**
-     * @Route("/tricks/new", name="trick_new")
+     * @Route("/tricks/new", priority="10", name="trick_new")
      */
     public function newAction(Request $request): Response
     {
         $trick = new Trick();
-        $form = $this->createForm(RegistrationFormType::class, $trick);
+        $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
-        return $this->render('trick/index.html.twig', [
-            'controller_name' => 'TrickController',
+        return $this->render('trick/editor.html.twig', [
+            'editorForm' => $form->createView(),
+            'type' => 'new'
         ]);
     }
 
     /**
      * @Route("/tricks/{id}/edit", name="trick_edit")
      */
-    public function editAction(Request $request, int $id): Response
+    public function editAction(Request $request, Trick $trick): Response
     {
-        $trickRepository = $this->getDoctrine()->getRepository(Trick::class);
-        $trick = $trickRepository->findOneBy(['id' => $id]);
-        dd($trick);
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
-        return $this->render('trick/index.html.twig', [
-            'controller_name' => 'TrickController',
+        return $this->render('trick/editor.html.twig', [
+            'editorForm' => $form->createView(),
+            'type' => 'edit'
         ]);
     }
 
@@ -58,7 +58,6 @@ class TrickController extends AbstractController
     {
         $trickRepository = $this->getDoctrine()->getRepository(Trick::class);
         $trick = $trickRepository->findOneBy(['id' => $id]);
-        dd($trick);
         return $this->render('trick/index.html.twig', [
             'controller_name' => 'TrickController',
         ]);

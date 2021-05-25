@@ -56,10 +56,15 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('edstrangedreams@gmail.com', 'SnowTricks'))
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
+                    ->subject('Veuillez confirmer votre email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
+
+            $this->addFlash(
+                'success',
+                'Bienvenue, vous pouvez maintenant commenter les figures mais vous devez encore confirmer votre email avant de pouvoir en créer, modifier ou supprimer'
+            );
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
