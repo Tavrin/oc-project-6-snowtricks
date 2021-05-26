@@ -42,6 +42,10 @@ class TrickController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
 
+        if (false === $this->getUser()->isVerified()) {
+            dd($this->getUser()->isVerified());
+        }
+
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
         return $this->render('trick/editor.html.twig', [

@@ -3,12 +3,15 @@
 const utils = {};
 
 utils.addCloseEventOnParent = (e) => {
-    console.log(e);
     e.currentTarget.parentNode.style.display = 'none';
 }
 
 utils.closeTarget = (e, target) => {
-    return target.classList.add('d-n');
+    return target.classList.style.display = 'none';
+}
+
+utils.getHost = () => {
+    return data.host;
 }
 
 utils.slugify = text =>

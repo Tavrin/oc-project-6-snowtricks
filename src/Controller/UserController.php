@@ -9,10 +9,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user", name="user")
+     * @Route("/settings", name="user")
      */
     public function index(): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
+
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
         ]);

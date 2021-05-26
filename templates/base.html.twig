@@ -13,6 +13,9 @@
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+        <script data-selector="datalayer">
+            const data = { "host" : "{{ url('index') }}" }
+        </script>
     </head>
     <body>
     {% block header %}

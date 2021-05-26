@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Manager\UserManager;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use App\Repository\UserRepository;
@@ -20,11 +21,14 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    private $emailVerifier;
+    private EmailVerifier $emailVerifier;
+    private UserManager $userManager;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(EmailVerifier $emailVerifier, UserManager $userManager)
     {
         $this->emailVerifier = $emailVerifier;
+        $this->userManager = $userManager;
+
     }
 
     /**
@@ -52,13 +56,7 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('edstrangedreams@gmail.com', 'SnowTricks'))
-                    ->to($user->getEmail())
-                    ->subject('Veuillez confirmer votre email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+            $this->userManager->sendVerificationEmail($this->emailVerifier, $user);
             // do anything else you need here, like send an email
 
             $this->addFlash(
@@ -77,6 +75,23 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/verify/send", name="app_send_verify")
+     */
+    public function sendVerificationEmail(): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
+        $this->userManager->sendVerificationEmail($this->emailVerifier, $user);
+
+        $this->addFlash(
+            'success',
+            'Une demande de confirmation a bien été renvoyée à '.$user->getEmail()
+        );
+
+        return $this->redirectToRoute('user');
     }
 
     /**
