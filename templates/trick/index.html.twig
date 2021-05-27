@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks - {{ content.trick.name }}{% endblock %}
+
+{% block body %}
+    <div class="form-zone">
+        <h1 class="zone-title">{{ content.trick.name }}</h1>
+        <div id="post-show-comments">
+            <h3>Commentaires</h3>
+            {% if app.user is defined and app.user is not empty %}
+
+            {% else %}
+            {% endif %}
+            {% if content.comments is defined and content.comments is not empty %}
+                {% for comment in content.comments %}
+                        <div id="}" class="{% if not loop.last %}bb-dg {% endif %}comment-item">
+                            <div class="w-100 d-f mb-1-5">
+
+                                <div>
+                                    <span class="fw-900 d-b mb-0-5"><a href="{{ comment.user.path??'#' }}">{{ comment.user.username?? 'utilisateur supprimé' }}</a></span>
+                                </div>
+                            </div>
+                            <p class="ta-l w-100">{{ comment.status == true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>' }}</p>
+                        </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

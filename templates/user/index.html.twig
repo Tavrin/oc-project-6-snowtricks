@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks - Paramètres utilisateur{% endblock %}
+
+{% block body %}
+    <div class="form-zone">
+        {% if app.user.isVerified == false %}
+            <div>
+                Adresse email non vérifiée : <a class="btn" style="max-width:2rem" href="{{ url('app_send_verify') }}">Renvoyer un email de confirmation</a>
+            </div>
+         {% else%}
+             <div>
+                 Adresse email vérifiée
+             </div>
+        {% endif %}
+    </div>
+{% endblock %}

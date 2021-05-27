@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks - page d'accueil{% endblock %}
+
+{% block body %}
+
+    <div id="landing-zone">
+        <div id="landing-zone-text">
+            <h1>Snowtricks</h1>
+            <h3>Be fearless, be creative</h3>
+        </div>
+    </div>
+    <section id="tricks-zone">
+        <h2 class="zone-title">Les figures</h2>
+    {% if content.tricks is defined and content.tricks is not empty %}
+        <div class="tricks-listing-grid">
+            {% for trick in content.tricks %}
+                <div class="trick-item">
+                    <div class="featured-item-image">
+                        {% include'/partials/inc/listing_media.html.twig' %}
+                    </div>
+                    <span class="trick-item-info"><a href="/tricks/{{ trick.id }}">{{ trick.name }}</a> {% if app.user and app.user.isVerified == true %}<span><a href="/tricks/{{ trick.id }}/edit"><i class="fas fa-pen"></i></a> <i class="fas fa-trash"></i></span>{% endif %}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2 style="text-align:center">Il n'existe encore pas de figure</h2>
+    {% endif %}
+    </section>
+{% endblock %}
