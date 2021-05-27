@@ -55,7 +55,7 @@ class Trick
     private $trickModifies;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", fetch="EAGER")
      */
     private $comments;
 

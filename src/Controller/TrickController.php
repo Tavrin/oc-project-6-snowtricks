@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\TrickFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,8 +17,10 @@ class TrickController extends AbstractController
      */
     public function index(Trick $trick): Response
     {
+        $content['trick'] = $trick;
+        $content['comments'] = $trick->getComments();
         return $this->render('trick/index.html.twig', [
-            'controller_name' => 'TrickController',
+            'content' => $content
         ]);
     }
 
@@ -43,8 +46,12 @@ class TrickController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         if (false === $this->getUser()->isVerified()) {
-            dd($this->getUser()->isVerified());
-        }
+            $this->addFlash(
+                'danger',
+                "L'adresse email doit être confirmée avant de pouvoir accéder à cette section"
+            );
+
+            return $this->redirectToRoute('user');        }
 
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
@@ -58,10 +65,8 @@ class TrickController extends AbstractController
     /**
      * @Route("/tricks/{id}/remove", name="trick_remove")
      */
-    public function removeAction(Request $request, int $id): Response
+    public function removeAction(Request $request, Trick $trick): Response
     {
-        $trickRepository = $this->getDoctrine()->getRepository(Trick::class);
-        $trick = $trickRepository->findOneBy(['id' => $id]);
         return $this->render('trick/index.html.twig', [
             'controller_name' => 'TrickController',
         ]);
