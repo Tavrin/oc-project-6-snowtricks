@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SnowTricks - email de réinitialisation envoyé{% endblock %}
+
+{% block body %}
+<div class="form-zone">
+    <p>
+        Si un compte avec cette adresse email existe, une demande de réinitialisation lui a été envoyée contenant un lien permettant la réinitialisation
+        Ce lien expirera dans{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+    </p>
+    <p>Si l'email n'a pas été reçu, vérifiez votre spam ou bien veuillez <a href="{{ path('app_forgot_password_request') }}">réessayer</a>.</p>
+</div>
+{% endblock %}

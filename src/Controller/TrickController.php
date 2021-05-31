@@ -29,6 +29,15 @@ class TrickController extends AbstractController
      */
     public function newAction(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        if (false === $this->getUser()->isVerified()) {
+            $this->addFlash(
+                'danger',
+                "L'adresse email doit être confirmée avant de pouvoir accéder à cette section"
+            );
+        }
+
         $trick = new Trick();
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
@@ -43,7 +52,7 @@ class TrickController extends AbstractController
      */
     public function editAction(Request $request, Trick $trick): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if (false === $this->getUser()->isVerified()) {
             $this->addFlash(
@@ -51,10 +60,16 @@ class TrickController extends AbstractController
                 "L'adresse email doit être confirmée avant de pouvoir accéder à cette section"
             );
 
-            return $this->redirectToRoute('user');        }
+            return $this->redirectToRoute('user');
+        }
 
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'Figure modifiée avec succès');
+            return $this->redirectToRoute('trick_show', ['id' => $trick->getId()]);
+        }
         return $this->render('trick/editor.html.twig', [
             'editorForm' => $form->createView(),
             'type' => 'edit'

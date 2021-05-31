@@ -17,7 +17,7 @@
             {% for trick in content.tricks %}
                 <div class="trick-item">
                     <div class="featured-item-image">
-                        {% include'/partials/inc/listing_media.html.twig' %}
+                        <a href="/tricks/{{ trick.id }}">{% include'/partials/inc/listing_media.html.twig' %}</a>
                     </div>
                     <span class="trick-item-info"><a href="/tricks/{{ trick.id }}">{{ trick.name }}</a> {% if app.user and app.user.isVerified == true %}<span><a href="/tricks/{{ trick.id }}/edit"><i class="fas fa-pen"></i></a> <i class="fas fa-trash"></i></span>{% endif %}</span>
                 </div>

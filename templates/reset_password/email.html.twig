@@ -1,0 +1,9 @@
+<h1>Demande de réinitialisation de mot de passe</h1>
+
+<p>Une demande de réinitialisation de mot de passe a été faite pour cette adresse email, si vous n'êtes pas à l'origine de cette demande veuillez ignorer ou supprimer cet email, sinon cliquez sur le lien ci dessous</p>
+
+<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+<p>Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+
+<p>SnowTricks</p>

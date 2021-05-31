@@ -40,7 +40,7 @@ class Trick
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
+     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks", fetch="EAGER")
      */
     private $trickGroup;
 

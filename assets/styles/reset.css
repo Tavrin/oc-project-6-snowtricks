@@ -20,6 +20,10 @@ button {
     -webkit-appearance: button; /* Safari otherwise prevents some styles */
 }
 
+small {
+    font-size: smaller;
+}
+
 button::-moz-focus-inner {
     border-style: none;
     padding: 0;

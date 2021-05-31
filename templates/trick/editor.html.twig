@@ -14,6 +14,11 @@
             {{ form_label(editorForm.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
             {{ form_widget(editorForm.description, { attr: {'class': 'form-control'}}) }}
         </div>
+        <div class="form-group">
+            {{ form_label(editorForm.trickGroup, 'Groupe de figure', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(editorForm.trickGroup, { attr: {'class': 'form-control'}}) }}
+        </div>
+        {{ form_row(editorForm.mainMedia) }}
         {{ form_rest(editorForm) }}
         <div class="form-submit">
             <button type="submit" class="btn">{{ 'new' == type ? 'Créer' : 'Editer'}}</button>

@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+<div class="form-zone">
+
+<h1 class="zone-title">Réinitialisation de mot de passe</h1>
+
+    {{ form_start(requestForm, {'attr' : {'class' : 'trick-editor-form'}}) }}
+        <div class="form-group">
+            {{ form_label(requestForm.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(requestForm.email, { attr: {'class': 'form-control'}}) }}
+            <small>
+                Veuillez entrer votre adresse email pour que nous puissions vous envoyer une demande de réinitialisation
+            </small>
+        </div>
+        <div class="form-submit">
+            <button class="btn">Envoyer</button>
+        </div>
+    {{ form_end(requestForm) }}
+</div>
+{% endblock %}
