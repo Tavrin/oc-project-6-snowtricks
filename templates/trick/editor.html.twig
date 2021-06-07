@@ -3,6 +3,7 @@
 {% block title %}Snowtricks - Nouvelle figure{% endblock %}
 
 {% block body %}
+    {% include 'partials/inc/media_modal.html.twig' %}
     <div class="form-zone">
         <h1 class="zone-title">{{ 'edit' == type ? "Editer la figure : " ~ editorForm.name.vars.value : 'Créer une nouvelle figure' }}</h1>
         {{ form_start(editorForm, {'attr' : {'class' : 'trick-editor-form'}}) }}

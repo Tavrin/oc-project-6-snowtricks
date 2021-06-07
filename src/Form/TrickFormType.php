@@ -50,7 +50,8 @@ class TrickFormType extends AbstractType
             ->add('addMedia', ButtonType::class, [
                 'attr' => [
                     'class' => 'btn js-modal',
-                    'data-target' => 'trick_form_mainMedia'
+                    'data-target' => 'trick_form_mainMedia',
+                    'data-target-modal' => 'mediaModal'
                     ],
             ]);
         ;

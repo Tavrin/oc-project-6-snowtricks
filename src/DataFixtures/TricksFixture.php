@@ -10,9 +10,15 @@ use App\Enum\GroupEnum;
 use App\Enum\TricksEnum;
 use DateTime;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TricksFixture extends \Doctrine\Bundle\FixturesBundle\Fixture
 {
+    private ?SluggerInterface $slugger = null;
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
 
     /**
      * @inheritDoc
@@ -34,6 +40,7 @@ class TricksFixture extends \Doctrine\Bundle\FixturesBundle\Fixture
             $trick->setName($trickType['name']);
             $trick->setDescription($trickType['description']);
             $trick->setTrickGroup($groups[$trickType['group']]);
+            $trick->setSlug($this->slugger->slug($trick->getName()));
             $trick->setCreatedat(new DateTime);
             $manager->persist($trick);
         }

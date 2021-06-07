@@ -1,4 +1,4 @@
-p a {
+p a,.comment-post a {
     color: #0097ff;
     font-weight: 800;
 }
@@ -9,6 +9,14 @@ p a {
 
 .m-r-1 {
     margin-right: 1rem;
+}
+
+.bb-dg {
+    border-bottom: 1px solid #DFE1E7;
+}
+
+.bt-dg {
+    border-top: 1px solid #DFE1E7;
 }
 
 .header {
@@ -162,6 +170,43 @@ p a {
     flex-direction: column;
 }
 
+/* Modal */
+.modal-bg {
+    background-color: rgba(0, 0, 0, 0.47);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    outline: none;
+}
+
+.modal {
+    overflow: auto;
+    height: 40rem;
+    width: 70%;
+    background: white;
+    margin: 1.75rem auto;
+    transition: transform .3s ease-out;
+    padding: 1rem;
+}
+
+.fade {
+    transition: opacity 15s linear;
+}
+
+.iframe {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+#form-view {
+    height: 100%;
+}
+
 #trick-show {
     display: flex;
     flex-direction: column;
@@ -180,6 +225,7 @@ p a {
 }
 
 #trick-show-comments {
+    padding-top: 1rem;
     display: flex;
     flex-direction: column;
     width: 50%;

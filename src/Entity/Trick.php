@@ -55,7 +55,7 @@ class Trick
     private $trickModifies;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick")
      */
     private $comments;
 
@@ -63,6 +63,11 @@ class Trick
      * @ORM\ManyToOne(targetEntity=Media::class)
      */
     private $mainMedia;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
 
     public function __construct()
     {
@@ -234,6 +239,18 @@ class Trick
     public function setMainMedia(?Media $mainMedia): self
     {
         $this->mainMedia = $mainMedia;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

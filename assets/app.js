@@ -15,5 +15,6 @@ import './javascript/header';
 import './javascript/binder';
 import './javascript/filler';
 import './javascript/modal';
+import './javascript/toggle-content';
 // start the Stimulus application
 import './bootstrap';

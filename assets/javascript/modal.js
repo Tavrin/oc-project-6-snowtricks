@@ -65,7 +65,7 @@ class Modal {
 
     addMediaToGallery() {
         if (false === this.loaded.gallery) {
-            this.ajaxCall('/api/medias/image').then(data => {
+            this.ajaxCall('/api/media').then(data => {
                 if (this.target.querySelector('#ajaxStatus')) {
                     document.querySelector('#ajaxStatus').style.display = 'none';
                 }
@@ -102,16 +102,11 @@ class Modal {
 
         this.galleryView.classList.toggle('d-n');
         if (false === this.loaded.form) {
-            this.ajaxCall('/api/medias/image/new').then(data => {
-                if (this.target.querySelector('#ajaxStatus')) {
-                    document.querySelector('#ajaxStatusNew').style.display = 'none';
-                }
-                this.loaded.form = true;
-                let renderer = new FormRender();
-                let form = renderer.renderFromDefault(data.data);
-                form.querySelector('#renderNewMediaButton').addEventListener('click', () => {this.createNewMedia(e, form)})
-                this.formView.appendChild(form);
-            });
+            let iframe = document.createElement('iframe');
+            iframe.src = '/modal/media/new'
+            iframe.classList.add('iframe')
+            this.loaded.form = true;
+            this.formView.appendChild(iframe);
         }
 
         this.formView.classList.toggle('d-n');
@@ -123,7 +118,7 @@ class Modal {
 
     createNewMedia(e, form) {
         const formData = new FormData(form);
-        this.ajaxCall('/api/medias/image/new', 'POST', formData).then(data => {
+        this.ajaxCall('/api/medias/new', 'POST', formData).then(data => {
             if ('ok' === data) {
                 this.loaded.gallery = false;
                 this.galleryView.innerHTML = '';
