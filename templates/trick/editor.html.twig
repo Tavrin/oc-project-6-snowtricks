@@ -2,6 +2,8 @@
 
 {% block title %}Snowtricks - Nouvelle figure{% endblock %}
 
+{% set media = trick.mainMedia.file ? '/uploads/tricks-images/' ~ trick.mainMedia.file : '' %}
+
 {% block body %}
     {% include 'partials/inc/media_modal.html.twig' %}
     <div class="form-zone">
@@ -19,7 +21,8 @@
             {{ form_label(editorForm.trickGroup, 'Groupe de figure', {'label_attr': {'class': 'form-label'}}) }}
             {{ form_widget(editorForm.trickGroup, { attr: {'class': 'form-control'}}) }}
         </div>
-        {{ form_row(editorForm.mainMedia) }}
+        <div id="mediaShow" class="js-filler" data-type="image" data-id="previewImage" data-src="{{ media }}"></div>
+        {{ form_widget(editorForm.mainMedia, {'value': media }) }}
         {{ form_rest(editorForm) }}
         <div class="form-submit">
             <button type="submit" class="btn">{{ 'new' == type ? 'Créer' : 'Editer'}}</button>

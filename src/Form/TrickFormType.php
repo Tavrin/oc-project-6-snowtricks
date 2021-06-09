@@ -40,8 +40,10 @@ class TrickFormType extends AbstractType
                 },
             ])
             ->add('mainMedia', HiddenType::class, [
+                'mapped'=> false,
                 'attr' => [
                 'class' => 'js-binder',
+                'id' => 'mainMedia',
                 'data-type' => 'image',
                 'data-from' => 'modal',
                 'data-target' => 'previewImage'

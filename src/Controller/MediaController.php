@@ -19,16 +19,6 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class MediaController extends AbstractController
 {
     /**
-     * @Route("/media", name="media")
-     */
-    public function index(): Response
-    {
-        return $this->render('media/index.html.twig', [
-            'controller_name' => 'MediaController',
-        ]);
-    }
-
-    /**
      * @Route("/api/media", name="api_media")
      */
     public function apiIndex(MediaRepository $mediaRepository, MediaHelpers $helper): JsonResponse

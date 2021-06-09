@@ -6,7 +6,7 @@
 {% block body %}
     <section id="trick-show">
         <div id="trick-show-zone">
-            <div class="trick-show-header" {% if content.trick.mainMedia is defined and content.trick.mainMedia is not empty %} style="background-image: url("{{ asset(trick.mainMedia) }}")!important"{% endif %}>
+            <div class="trick-show-header" {% if content.trick.mainMedia is defined and content.trick.mainMedia is not empty %} style="background-image: url('/uploads/tricks-images/{{ content.trick.mainMedia.file }}')!important; background-size: contain; background-repeat: no-repeat"{% endif %}>
                 <div id="landing-zone-text">
                     <h1 class="zone-title">{{ content.trick.name }}</h1>
                 </div>
@@ -44,6 +44,12 @@
                         <p class="ta-l w-100">{{ comment.status == true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>' }}</p>
                         <span style="text-align: right" class="js-toggle" data-target-id="response-{{ comment.id }}" data-type="display">Répondre</span>
                         <div class="d-n" id="response-{{ comment.id }}">
+                            {% if comment.comments is defined and comment.commpents is iterable %}{
+                                {% set level = 5 %}
+                                {% for childComment in comment.comments %}
+                                <div></div>
+                                {% endof %}
+                            {% endif %}
                         {% include '/partials/inc/comment.html.twig' with {'type': 'child'} %}
                         </div>
                     </div>

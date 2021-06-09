@@ -26,7 +26,7 @@ class MediaHelpers
             $hydratedArray[$key]['createdAt'] = $entity->getCreatedAt()->format("Y-m-d\TH:i:s");
             $hydratedArray[$key]['updatedAt'] = $entity->getUpdatedAt() ? $entity->getUpdatedAt()->format("Y-m-d\TH:i:s") : null;
             $hydratedArray[$key]['caption'] = $entity->getCaption();
-            $hydratedArray[$key]['file'] = $this->targetDirectory.'/'.$entity->getFile();
+            $hydratedArray[$key]['file'] = '/uploads/tricks-images/'.$entity->getFile();
         }
 
         return $hydratedArray;
