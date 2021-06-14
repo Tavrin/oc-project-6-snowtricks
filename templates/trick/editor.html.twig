@@ -24,7 +24,9 @@
         </div>
         <div id="mediaShow" class="js-filler" data-type="image" data-id="previewImage" data-src="{{ media }}"></div>
         {{ form_widget(editorForm.mainMedia, {'value': media }) }}
+        <div class="editor-media-buttons">
         {{ form_rest(editorForm) }}
+        </div>
         <div class="form-submit">
             <button type="submit" class="btn">{{ 'new' == type ? 'Créer' : 'Editer'}}</button>
         </div>

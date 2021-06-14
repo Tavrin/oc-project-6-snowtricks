@@ -22,7 +22,7 @@ class TrickController extends AbstractController
     public function index(Request $request, Trick $trick): Response
     {
         $content['trick'] = $trick;
-        $content['comments'] = $trick->getComments();
+        $content['comments'] = $trick->getCommentsWithoutParent();
         $comment = new Comment();
         $form = $this->createForm(CommentFormType::class, $comment);
         $form->handleRequest($request);

@@ -69,11 +69,17 @@ class Trick
      */
     private $slug;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Video::class, mappedBy="trick")
+     */
+    private $videos;
+
     public function __construct()
     {
         $this->trickMedia = new ArrayCollection();
         $this->trickModifies = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -209,6 +215,21 @@ class Trick
         return $this->comments;
     }
 
+    /**
+     * @return array|Comment[]
+     */
+    public function getCommentsWithoutParent(): array
+    {
+        $comments = [];
+        foreach ($this->comments as $comment) {
+            if (null === $comment->getParent()) {
+                $comments[] = $comment;
+            }
+        }
+        return $comments;
+    }
+
+
     public function addComment(Comment $comment): self
     {
         if (!$this->comments->contains($comment)) {
@@ -251,6 +272,33 @@ class Trick
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->addTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            $video->removeTrick($this);
+        }
 
         return $this;
     }

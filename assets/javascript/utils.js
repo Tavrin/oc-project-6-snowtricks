@@ -52,4 +52,12 @@ utils.ajax = (link, method = 'GET', body = null) => {
         });
 }
 
+utils.addFlash = (alert) => {
+    console.log(alert);
+    if (alert.querySelectorAll('.flash-close').length > 0) {
+        let button = alert.querySelectorAll('.flash-close')[0];
+        button.addEventListener('click', utils.addCloseEventOnParent);
+    }
+}
+
 export {utils};

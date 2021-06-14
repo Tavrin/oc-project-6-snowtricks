@@ -7,15 +7,14 @@
     <script>
         const metadata = {
             id: {{ content.trick.id }},
-            slug: "{{ content.trick.slug }}" ?? null
+            slug: "{{ content.trick.slug }}" ?? null,
+            user: "{{ app.user.username }}" ?? null
         }
     </script>
 {% endblock %}
 {% set commentWidget = form_widget(commentForm.content, { attr: {'class': 'form-control'}}) %}
-{% dump %}
 {% block body %}
-
-{% macro showChild(comment) %}
+{% macro showChild(comment, level) %}
     {% import _self as macros %}
 <div id="" class="comment-item">
     <div class="w-100 d-f mb-1-5">
@@ -24,14 +23,21 @@
         </div>
     </div>
     <p class="ta-l w-100">{{ comment.status == true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>' }}</p>
+    {% if level < 5 %}
     <span style="text-align: right" class="js-toggle comment-response" data-pid="{{ comment.id }}" data-target-id="response-{{ comment.id }}" data-type="display">Répondre</span>
     <div class="d-n" id="response-{{ comment.id }}">
+    {% endif %}
     </div>
-    {% for child in comment.children %}
-        {{ macros.showChild(child) }}
-    {% endfor %}
+        <div id="answers-{{ comment.id }}">
+            {% set level = level + 1 %}
+        {% for child in comment.children %}
+
+            {{ macros.showChild(child, level) }}
+        {% endfor %}
+        </div>
     </div>
 {% endmacro %}
+
     <section id="trick-show">
         <div id="trick-show-zone">
             <div class="trick-show-header" {% if content.trick.mainMedia is defined and content.trick.mainMedia is not empty %} style="background-image: url('/uploads/tricks-images/{{ content.trick.mainMedia.file }}')!important; background-size: contain; background-repeat: no-repeat"{% endif %}>
@@ -61,8 +67,9 @@
                 {% include '/partials/inc/comment.html.twig' with {'type': 'new'} %}
             </div>
             {% if content.comments is defined and content.comments is not empty %}
+                {% set level = 0 %}
                 {% for comment in content.comments %}
-                    {{ macros.showChild(comment) }}
+                    {{ macros.showChild(comment, level) }}
                 {% endfor %}
             {% else%}
                 <div id="" class="comment-item">
