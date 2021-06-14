@@ -31,14 +31,26 @@ class CommentFormType extends AbstractType
                     'rows' => '5'
                 ]
             ])
-            ->add('pid', HiddenType::class)
+            ->add('parentId', HiddenType::class, [
+                'mapped' => false,
+                'data' => $options['parentId']
+            ])
+            ->add('trickId', HiddenType::class, [
+                'mapped' => false,
+                'data' => $options['trickId']
+            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Comment::class
+            'data_class' => Comment::class,
+            'parentId' => null,
+            'trickId' => null
         ]);
+
+        $resolver->setAllowedTypes('parentId', ['int', 'null']);
+        $resolver->setAllowedTypes('trickId', ['int', 'null']);
     }
 }

@@ -57,14 +57,4 @@ class MediaController extends AbstractController
             'type' => 'new'
         ]);
     }
-
-    /**
-     * @Route("/modal/media/{id}", name="edit_media_modal")
-     */
-    public function editMediaModal(MediaRepository $mediaRepository, Media $media = null): Response
-    {
-        dd($media);
-        $medias = $mediaRepository->findBy(['type' => $type]);
-        return new JsonResponse(['response' => $medias]);
-    }
 }

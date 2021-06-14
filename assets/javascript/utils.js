@@ -25,4 +25,31 @@ utils.slugify = text =>
         .replace(/[^\w-]+/g, '')
         .replace(/--+/g, '-')
 
+utils.ajax = (link, method = 'GET', body = null) => {
+    console.log(body);
+    return fetch(link, {
+        method: method,
+        body: body,
+        headers : {
+            Accept: "*/*"
+        }
+    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return Promise.reject({
+                    status: response.status,
+                    statusText: response.statusText
+                });
+            }
+        })
+        .then((data) => {
+            return data;
+        })
+        .catch(function (error) {
+            console.log('error', error);
+        });
+}
+
 export {utils};

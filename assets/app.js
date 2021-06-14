@@ -16,5 +16,13 @@ import './javascript/binder';
 import './javascript/filler';
 import './javascript/modal';
 import './javascript/toggle-content';
+import './javascript/CommentResponse';
 // start the Stimulus application
 import './bootstrap';
+import CommentResponse from "./javascript/CommentResponse";
+
+Array.from(document.querySelectorAll('.comment-response')).forEach(el => {
+    let response = new CommentResponse(el);
+    response.setListener();
+})
+

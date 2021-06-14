@@ -9,7 +9,6 @@ class ToggleContent {
         this.revertToggle = false;
         this.target = elem;
         this.addListener(elem);
-        console.log(this);
     }
 
     addListener(elem) {

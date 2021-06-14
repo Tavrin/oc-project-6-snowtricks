@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Snowtricks - Nouvelle figure{% endblock %}
-
-{% set media = trick.mainMedia.file ? '/uploads/tricks-images/' ~ trick.mainMedia.file : '' %}
-
+{% set media = '' %}
+{% if trick.mainMedia is defined and trick.mainMedia is not empty %}
+    {% set media = trick.mainMedia.file ? '/uploads/tricks-images/' ~ trick.mainMedia.file : '' %}
+{% endif %}
 {% block body %}
     {% include 'partials/inc/media_modal.html.twig' %}
     <div class="form-zone">
