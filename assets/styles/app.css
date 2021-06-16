@@ -188,6 +188,10 @@ p a,.comment-post a {
     padding: 1rem 0 1rem 1rem;
 }
 
+.answers-even {
+    background-color: white!important;
+}
+
 .comment-item .new {
     background-color: rgba(44, 246, 70, 0.27);
     color: white;

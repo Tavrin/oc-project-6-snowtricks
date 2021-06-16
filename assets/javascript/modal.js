@@ -1,97 +1,197 @@
 "use strict";
-import {FormRender} from './formRender.js';
-let utils = window.utils;
-
+import {utils} from "./utils.js";
+import {ModalError} from "./exceptions/ModalError.js";
 
 class Modal {
     constructor(elem) {
-        this.button = document.querySelector('#closeModalButton');
-        this.initiated = false;
-        this.state = false;
+        this.elem = elem;
+        this.button = {
+            target: null,
+            initialized: false
+        };
+        this.target = null;
+        this.id = null;
+        this.data = {
+            title: null,
+            content: null
+        }
         this.type = null;
-        this.options = [];
         this.galleryView = null;
         this.formView = null;
         this.open = {
             "form" : false
         };
-        this.addCloseButton();
-        this.addListener(elem);
-        this.target = elem;
+
         this.loaded = {
             'gallery' : false,
             'form' : false
         };
     }
 
-    addCloseButton() {
-        this.button.addEventListener('click', () => {
-            this.target.classList.toggle('d-n');
-        })
-    }
-    addListener(elem) {
-        if (elem.dataset.options) {
-            this.options = JSON.parse(elem.dataset.options);
+    init() {
+        if (this.elem.dataset.type) {
+            this.type = this.elem.dataset.type;
+        } else {
+            throw new ModalError('no modal type');
+        }
+        if (this.elem.dataset.targetId) {
+            this.id = this.elem.dataset.targetId;
+            this.target =document.querySelector('#' + this.elem.dataset.targetId);
+            this.button.target = this.target.querySelector('#closeModalButton');
+
+            this.addListeners();
+        } else {
+            throw new ModalError('no target modal id');
         }
 
-        if (elem.dataset.targetId) {
-            this.target = `#${elem.dataset.targetId}`;
-        }
-
-        this.setModalEvent(elem)
+        this.data.title = this.target.querySelector('#modal-title');
+        this.data.content = this.target.querySelector('#modal-content');
     }
 
-    setModalEvent(elem) {
-        elem.addEventListener('click', () => {
-            this.state = !this.state;
-            if (elem.dataset.targetModal && document.querySelector('#' + elem.dataset.targetModal) !== null) {
-                this.target = document.querySelector('#' + elem.dataset.targetModal);
+    addListeners() {
+        if (!utils.store.getKey(this.id+'-button')) {
+            this.button.target.addEventListener('click', () => {
                 this.target.classList.toggle('d-n');
-                if (false === this.initiated) {
-                    this.setModalData(elem);
+            })
+
+            utils.store.addKey(this.id+'-button');
+        }
+
+        this.elem.addEventListener('click', (e) => {
+            if ('confirm' === this.type) {
+                e.preventDefault();
+            }
+
+            if (this.target) {
+                this.target.classList.toggle('d-n');
+
+                console.log(utils.store.getKey(this.id+'-type'));
+                if (this.type !== utils.store.getKey(this.id+'-type')) {
+                    utils.store.addKey(this.id+'-type', this.type);
+                    this.resetModal();
+                } else if (null === utils.store.getKey(this.id+'-type')){
+                    utils.store.addKey(this.id+'-type', this.type);
+                }
+
+                if (false === utils.store.getKey(this.id+'-initiated')) {
+                    this.setModalData();
                 }
             }
         })
     }
 
-    setModalData(elem) {
-        this.galleryView = this.target.querySelector('#gallery-view');
-        this.formView = this.target.querySelector('#form-view');
-        let newImage = this.target.querySelector('#addImageButton');
-        newImage.addEventListener('click', (e) => {this.modalButtonAddImage(e)})
-        this.addMediaToGallery();
-        this.initiated = true;
+    resetModal() {
+        this.data.title.innerHTML = '';
+        this.data.content.innerHTML = '';
+        utils.store.addKey(this.id+'-initiated', false);
+    }
+
+    setModalData() {
+        if ('confirm' === this.type) {
+            this.setConfirm();
+        }
+        if ('image' === this.type || 'video' === this.type) {
+            let galleryView = document.createElement('div');
+            galleryView.id = 'gallery-view';
+            let formView = document.createElement('div');
+            formView.id = 'form-view';
+            let ajaxStatus = document.createElement('p');
+            ajaxStatus.id = 'ajaxStatus';
+            ajaxStatus.innerText = 'chargement...';
+            galleryView.appendChild(ajaxStatus);
+            ajaxStatus.id = 'ajaxStatusNew';
+            formView.appendChild(ajaxStatus);
+            this.data.content.appendChild(galleryView);
+            this.data.content.appendChild(formView);
+            this.galleryView = this.target.querySelector('#gallery-view');
+            this.formView = this.target.querySelector('#form-view');
+            if ('image' === this.type) {
+                this.addMediaToGallery();
+            }
+            if ('video' === this.type) {
+                this.setVideo();
+            }
+        }
+
+        utils.store.addKey(this.id+'-initiated', true);
+    }
+
+    setConfirm() {
+        this.data.title.innerHTML = 'Confirmation de suppression';
+        let cancelButton = document.createElement('button');
+        cancelButton.id = 'modalCancelButton';
+        cancelButton.innerText = 'Annuler';
+        cancelButton.addEventListener('click', () => {
+            this.target.classList.toggle('d-n');
+        })
+        this.data.content.appendChild(cancelButton);
+        let confirmButton = document.createElement('button');
+        confirmButton.innerText = 'Confirmer';
+        confirmButton.id = 'modalConfirmButton';
+        confirmButton.addEventListener('click', () => {
+            window.location.href = this.url;
+        })
+        this.url = this.elem.href;
+        this.data.content.appendChild(confirmButton);
+
+    }
+
+    setVideo() {
+        this.data.title.innerHTML = 'Galerie vidéo';
+        let slug = null;
+        if (this.elem.dataset.slug) {
+            slug = this.elem.dataset.slug;
+        } else if (metadata) {
+            slug = metadata.slug ?? null ;
+        }
+        utils.ajax(`/api/tricks/${slug}/videos`).then(data => {
+            if (this.target.querySelector('#ajaxStatus')) {
+                document.querySelector('#ajaxStatus').style.display = 'none';
+            }
+            data.response.forEach(e => {
+                console.log(data.response);
+                let containerItem = document.createElement('div');
+                containerItem.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/watch?v=arzLq-47QFA"
+                                            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write;
+                                             encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                this.galleryView.appendChild(containerItem);
+            })
+        })
     }
 
     addMediaToGallery() {
-        if (false === this.loaded.gallery) {
-            this.ajaxCall('/api/media').then(data => {
-                if (this.target.querySelector('#ajaxStatus')) {
-                    document.querySelector('#ajaxStatus').style.display = 'none';
-                }
-                console.log(data);
-                data.forEach(element => {
-                    console.log(element);
-                    let containerItem = document.createElement('div');
-                    let imageInfo = document.createElement('div');
-                    imageInfo.innerHTML = `
-                        <p>${element.name}</p>
-                        <button class="button-bb-wc modal-media-button" data-path="${element['file']}" >Sélectionner</button>
-                        `;
-                    containerItem.classList = 'maw-22 d-f p-1 fd-c ai-c jc-sb';
-                    let item = document.createElement('img');
-                    item.src = element['file'];
-                    item.classList = 'maw-100 of-cov';
-                    containerItem.appendChild(item);
-                    containerItem.appendChild(imageInfo);
-                    this.galleryView.appendChild(containerItem);
-                })
+        if ('image' === this.type) {
+            this.data.title.innerHTML = 'Galerie d\'images';
+            let newImage = this.target.querySelector('#addImageButton');
+            newImage.addEventListener('click', (e) => {this.modalButtonAddImage(e)});
 
-                document.querySelectorAll('.modal-media-button').forEach((e) => {
-                    e.addEventListener('click', () => {this.modalButtonGetMedias(e)})
+                utils.ajax('/api/media/images').then(data => {
+                    if (this.target.querySelector('#ajaxStatus')) {
+                        document.querySelector('#ajaxStatus').style.display = 'none';
+                    }
+                    console.log(data);
+                    data.response.forEach(element => {
+                        console.log(element);
+                        let containerItem = document.createElement('div');
+                        let imageInfo = document.createElement('div');
+                        imageInfo.innerHTML = `
+                            <p>${element.name}</p>
+                            <button class="button-bb-wc modal-media-button" data-path="${element['file']}" >Sélectionner</button>
+                            `;
+                        containerItem.classList = 'maw-22 d-f p-1 fd-c ai-c jc-sb';
+                        let item = document.createElement('img');
+                        item.src = element['file'];
+                        item.classList = 'maw-100 of-cov';
+                        containerItem.appendChild(item);
+                        containerItem.appendChild(imageInfo);
+                        this.galleryView.appendChild(containerItem);
+                    })
+
+                    document.querySelectorAll('.modal-media-button').forEach((e) => {
+                        e.addEventListener('click', () => {this.modalButtonGetMedias(e)})
+                    });
+                    this.loaded.gallery = true;
                 });
-                this.loaded.gallery = true;
-            });
         }
     }
 
@@ -105,7 +205,7 @@ class Modal {
         this.galleryView.classList.toggle('d-n');
         if (false === this.loaded.form) {
             let iframe = document.createElement('iframe');
-            iframe.src = '/modal/media/new'
+            iframe.src = '/modal/media/images/new'
             iframe.classList.add('iframe')
             this.loaded.form = true;
             this.formView.appendChild(iframe);
@@ -120,8 +220,8 @@ class Modal {
 
     createNewMedia(e, form) {
         const formData = new FormData(form);
-        this.ajaxCall('/api/medias/new', 'POST', formData).then(data => {
-            if ('ok' === data) {
+        utils.ajax('/api/medias/new', 'POST', formData).then(data => {
+            if ('ok' === data.response) {
                 this.loaded.gallery = false;
                 this.galleryView.innerHTML = '';
                 let button = this.target.querySelector('#addImageButton');
@@ -142,34 +242,9 @@ class Modal {
         let event = new Event('change');
         inputTarget.dispatchEvent(event);
     }
-
-    ajaxCall(link, method = 'GET', body = null) {
-        return fetch(link, {
-            method: method,
-            body: body,
-            headers : {
-                Accept: "*/*"
-            }
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    return Promise.reject({
-                        status: response.status,
-                        statusText: response.statusText
-                    });
-                }
-            })
-            .then((data) => {
-                return data.response;
-            })
-            .catch(function (error) {
-                console.log('error', error);
-            });
-    }
 }
 
 document.querySelectorAll('.js-modal').forEach((element) => {
-    new Modal(element);
+    let modal = new Modal(element);
+    modal.init();
 })

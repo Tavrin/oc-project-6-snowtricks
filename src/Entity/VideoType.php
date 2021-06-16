@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\VideoRepository;
+use App\Repository\VideoTypeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=VideoRepository::class)
+ * @ORM\Entity(repositoryClass=VideoTypeRepository::class)
  */
-class Video
+class VideoType
 {
     /**
      * @ORM\Id
@@ -23,17 +25,6 @@ class Video
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $url;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="videos")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $trick;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -44,9 +35,14 @@ class Video
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=VideoType::class, inversedBy="videos")
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="videoType")
      */
-    private $videoType;
+    private $videos;
+
+    public function __construct()
+    {
+        $this->videos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -61,30 +57,6 @@ class Video
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(string $url): self
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
-    public function getTrick(): ?Trick
-    {
-        return $this->trick;
-    }
-
-    public function setTrick(?Trick $trick): self
-    {
-        $this->trick = $trick;
 
         return $this;
     }
@@ -113,14 +85,32 @@ class Video
         return $this;
     }
 
-    public function getVideoType(): ?VideoType
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
     {
-        return $this->videoType;
+        return $this->videos;
     }
 
-    public function setVideoType(?VideoType $videoType): self
+    public function addVideo(Video $video): self
     {
-        $this->videoType = $videoType;
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setVideoType($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getVideoType() === $this) {
+                $video->setVideoType(null);
+            }
+        }
 
         return $this;
     }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Media;
+use App\Entity\Trick;
 use App\Form\MediaFormType;
 use App\Helpers\MediaHelpers;
 use App\Repository\MediaRepository;
@@ -19,7 +20,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class MediaController extends AbstractController
 {
     /**
-     * @Route("/api/media", name="api_media")
+     * @Route("/api/media/images", name="api_media")
      */
     public function apiIndex(MediaRepository $mediaRepository, MediaHelpers $helper): JsonResponse
     {
@@ -29,7 +30,7 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/modal/media/new", name="new_media_modal")
+     * @Route("/modal/media/images/new", name="new_media_modal")
      */
     public function newMediaModal(Request $request, MediaRepository $mediaRepository, FileUploader $fileUploader): Response
     {
@@ -56,5 +57,15 @@ class MediaController extends AbstractController
             'form' => $form->createView(),
             'type' => 'new'
         ]);
+    }
+
+    /**
+     * @Route("/api/tricks/{slug}/videos", name="videos_index")
+     */
+    public function apiVideoIndex(Trick $trick, MediaHelpers $helper): JsonResponse
+    {
+        $videos = $trick->getVideos();
+        $videos = $helper->hydrateVideoArray($videos);
+        return new JsonResponse(['response' => $videos], 200, ['Access-Control-Allow-Origin'=> '*']);
     }
 }

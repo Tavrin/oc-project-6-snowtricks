@@ -1,7 +1,7 @@
 "use strict";
 
 const utils = {};
-
+let test = 1;
 utils.addCloseEventOnParent = (e) => {
     e.currentTarget.parentNode.style.display = 'none';
 }
@@ -26,7 +26,6 @@ utils.slugify = text =>
         .replace(/--+/g, '-')
 
 utils.ajax = (link, method = 'GET', body = null) => {
-    console.log(body);
     return fetch(link, {
         method: method,
         body: body,
@@ -49,7 +48,22 @@ utils.ajax = (link, method = 'GET', body = null) => {
         })
         .catch(function (error) {
             console.log('error', error);
+            return error;
         });
+}
+
+utils.store = {
+    state: {
+    },
+    addKey(key, value = true) {
+        this.state[key] = value;
+    },
+    getKey(key) {
+        if ('undefined' == typeof key) {
+            return  null;
+        }
+        return this.state[key] ?? null;
+    }
 }
 
 utils.addFlash = (alert) => {

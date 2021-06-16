@@ -55,7 +55,7 @@ class Trick
     private $trickModifies;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", cascade={"remove"})
      */
     private $comments;
 
@@ -70,7 +70,7 @@ class Trick
     private $slug;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Video::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true)
      */
     private $videos;
 
@@ -288,7 +288,7 @@ class Trick
     {
         if (!$this->videos->contains($video)) {
             $this->videos[] = $video;
-            $video->addTrick($this);
+            $video->setTrick($this);
         }
 
         return $this;
@@ -297,7 +297,10 @@ class Trick
     public function removeVideo(Video $video): self
     {
         if ($this->videos->removeElement($video)) {
-            $video->removeTrick($this);
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
         }
 
         return $this;

@@ -37,6 +37,7 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="comments")
+     * @ORM\JoinColumn(name="trick_id",referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     private $trick;
 
@@ -52,7 +53,7 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity=Comment::class, inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $parent;
 

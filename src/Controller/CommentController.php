@@ -56,7 +56,7 @@ class CommentController extends AbstractController
                 return new JsonResponse(['data' => 'error'], 500);
             }
             $this->addFlash('success', 'Commentaire posté');
-            return new JsonResponse(['data' => 'success', 201]);
+            return new JsonResponse(['status' => 201, 'data' => 'success', 'user' => $this->getUser()->getUsername()], 201);
         }
 
         return new JsonResponse(['data' => $this->render('comment/new.html.twig', ['commentForm' => $form->createView()])->getContent()

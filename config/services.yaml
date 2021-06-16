@@ -37,7 +37,3 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%tricks_images_directory%'
-
-    App\Helpers\MediaHelpers:
-        arguments:
-            $targetDirectory: '%tricks_images_directory%'

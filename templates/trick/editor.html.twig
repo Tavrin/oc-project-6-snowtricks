@@ -2,6 +2,14 @@
 
 {% block title %}Snowtricks - Nouvelle figure{% endblock %}
 {% set media = '' %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        const metadata = {
+            id: {{ trick.id }},
+            slug: "{{ trick.slug }}" ?? null}
+    </script>
+{% endblock %}
 {% if trick.mainMedia is defined and trick.mainMedia is not empty %}
     {% set media = trick.mainMedia.file ? '/uploads/tricks-images/' ~ trick.mainMedia.file : '' %}
 {% endif %}
