@@ -48,17 +48,18 @@ export default class CommentResponse {
                 `
                 flash = document.createRange().createContextualFragment(flash);
 
-                let message = `
-            <div id="" class="comment-item new">
-                <div class="w-100 d-f mb-1-5">
-                    <div>
-                        <span class="fw-900 d-b mb-0-5"><a href="#">${data.user}</a></span>
+                let message =
+                    `
+                    <div id="" class="comment-item new">
+                        <div class="w-100 d-f mb-1-5">
+                            <div>
+                                <span class="fw-900 d-b mb-0-5"><a href="#">${data.user}</a></span>
+                            </div>
+                        </div>
+                        <p class="ta-l w-100">${this.message}</p>
+                        </div>
                     </div>
-                </div>
-                <p class="ta-l w-100">${this.message}</p>
-                </div>
-            </div>
-            `
+                    `
                 message = document.createRange().createContextualFragment(message);
                 let container = document.querySelector(`#answers-${this.params.pid}`);
                 container.insertBefore(message, container.firstChild);

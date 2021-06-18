@@ -57,6 +57,7 @@ class TrickFormType extends AbstractType
                     'data-target-id' => 'mediaModal',
                     'data-type' => 'image'
                     ],
+                'label' => 'Images'
             ])
             ->add('videos', ButtonType::class, [
                 'attr' => [

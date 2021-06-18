@@ -222,6 +222,32 @@ p a,.comment-post a {
     padding: 1rem;
 }
 
+.modal-image-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-media-gallery-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-media-gallery {
+    justify-content: flex-start;
+    padding-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.modal-image-item {
+    display: flex;
+    max-width: 20rem;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
+
 .fade {
     transition: opacity 15s linear;
 }

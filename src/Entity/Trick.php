@@ -45,7 +45,7 @@ class Trick
     private $trickGroup;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickMedia::class, mappedBy="media", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=TrickMedia::class, mappedBy="trick", orphanRemoval=true)
      */
     private $trickMedia;
 
@@ -150,27 +150,73 @@ class Trick
     /**
      * @return Collection|TrickMedia[]
      */
-    public function getTrickMedia(): Collection
+    public function getTrickMedias(): Collection
     {
         return $this->trickMedia;
     }
 
-    public function addTrickMedium(TrickMedia $trickMedium): self
+
+    /**
+     * @param int $mediaId
+     * @return TrickMedia|null
+     */
+    public function getTrickMedia(int $mediaId): ?TrickMedia
     {
-        if (!$this->trickMedia->contains($trickMedium)) {
-            $this->trickMedia[] = $trickMedium;
-            $trickMedium->setMedia($this);
+        foreach ($this->trickMedia as $trickMedia) {
+            if ($mediaId === $trickMedia->getMedia()->getId()) {
+                return $trickMedia;
+            }
+        }
+
+        return null;
+    }
+
+    public function addTrickMedia(TrickMedia $trickMedia): self
+    {
+        if (!$this->trickMedia->contains($trickMedia)) {
+            $this->trickMedia[] = $trickMedia;
+            $trickMedia->setMedia($this);
         }
 
         return $this;
     }
 
-    public function removeTrickMedium(TrickMedia $trickMedium): self
+    /**
+     * @param int $mediaId
+     * @return bool
+     */
+    public function hasMedia(int $mediaId): bool
     {
-        if ($this->trickMedia->removeElement($trickMedium)) {
+        foreach ($this->trickMedia as $trickMedia) {
+            if ($mediaId === $trickMedia->getMedia()->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function removeTrickMedia(TrickMedia $trickMedia): self
+    {
+        if ($this->trickMedia->removeElement($trickMedia)) {
             // set the owning side to null (unless already changed)
-            if ($trickMedium->getMedia() === $this) {
-                $trickMedium->setMedia(null);
+            if ($trickMedia->getMedia() === $this) {
+                $trickMedia->setMedia(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeTrickMediaFromMediaId(int $mediaId): self
+    {
+        foreach ($this->trickMedia as $trickMedia) {
+            if ($mediaId === $trickMedia->getMedia()->getId()) {
+                $this->trickMedia->removeElement($trickMedia);
+                if ($trickMedia->getMedia() === $this) {
+                    $trickMedia->setMedia(null);
+                }
+
             }
         }
 

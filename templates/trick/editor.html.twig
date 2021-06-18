@@ -6,8 +6,14 @@
     {{ parent() }}
     <script>
         const metadata = {
-            id: {{ trick.id }},
-            slug: "{{ trick.slug }}" ?? null}
+        {% if trick is defined and trick is not empty %}
+            id: {{ trick.id ?? null }},
+            slug: "{{ trick.slug ?? null }}"
+        {% else %}
+            id: null,
+            slug: null
+        {% endif %}
+        }
     </script>
 {% endblock %}
 {% if trick.mainMedia is defined and trick.mainMedia is not empty %}

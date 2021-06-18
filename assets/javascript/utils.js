@@ -37,10 +37,7 @@ utils.ajax = (link, method = 'GET', body = null) => {
             if (response.ok) {
                 return response.json();
             } else {
-                return Promise.reject({
-                    status: response.status,
-                    statusText: response.statusText
-                });
+                return response.json();
             }
         })
         .then((data) => {

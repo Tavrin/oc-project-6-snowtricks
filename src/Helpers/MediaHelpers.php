@@ -3,13 +3,44 @@
 
 namespace App\Helpers;
 
+use App\Entity\Trick;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Persistence\ManagerRegistry;
+use Psr\Container\ContainerInterface;
 
 class MediaHelpers
 {
-    public function hydrateMediaArray(array $entities): array
+    private ManagerRegistry $doctrine;
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+
+    public function hydrateMediaArray($entities, $queries = null): array
     {
         $hydratedArray = [];
+        if (isset($queries['excluded-tricks'])) {
+            $tricks = $queries['excluded-tricks'];
+            foreach (explode(',', $tricks) as $trick) {
+                $trick = $this->doctrine->getRepository(Trick::class)->findOneBy(['slug' => $trick]);
+                if (!$trick) {
+                    continue;
+                }
+
+                foreach ($entities as $media) {
+                    if ($trick->hasMedia($media->getId())) {
+                        continue;
+                    }
+
+                    $hydratedArray[] = $media;
+                }
+
+            }
+            $entities = $hydratedArray;
+        }
+
+        $hydratedArray = [];
+
         foreach ($entities as $key => $entity)
         {
             $hydratedArray[$key]['id'] = $entity->getId();
