@@ -8,6 +8,7 @@ use App\Entity\Comment;
 use App\Entity\Trick;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class CommentManager
@@ -26,10 +27,23 @@ class CommentManager
      * @param int|null $parentId
      * @return Comment
      */
-    public function saveComment(Comment $comment, $user, int $trickId = null, int $parentId = null): Comment
+    public function saveComment(Comment $comment, $user, FormInterface $form): Comment
     {
-        $trick = $this->em->getRepository(Trick::class)->find($trickId);
-        $parent = $this->em->getRepository(Comment::class)->find($parentId);
+        $trickId = null;
+        if ($form->has('trickId')) {
+            $trickId = $form->get('trickId')->getData();
+        }
+        $parentId = null;
+        if ($form->has('parentId')) {
+            $parentId = $form->get('parentId')->getData();
+        }
+        if (null !== $trickId) {
+            $trick = $this->em->getRepository(Trick::class)->find($trickId);
+        }
+        if (null !== $parentId) {
+            $parent = $this->em->getRepository(Comment::class)->find($parentId);
+        }
+
         $comment->setStatus(true);
         $comment->setTrick($trick);
         $comment->setParent($parent);

@@ -28,14 +28,7 @@ class CommentController extends AbstractController
         $form = $this->createForm(CommentFormType::class, $comment, ['parentId' => $content['pid'], 'trickId' => $content['trickId']]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->has('trickId')) {
-                $trickId = $form->get('trickId')->getData();
-            }
-            if ($form->has('parentId')) {
-                $parentId = $form->get('parentId')->getData();
-            }
-
-            $commentManager->saveComment($comment, $this->getUser(), $trickId ?? null, $parentId ?? null);
+            $commentManager->saveComment($comment, $this->getUser(), $form);
             return new JsonResponse(['status' => 201, 'data' => 'success', 'user' => $this->getUser()->getUsername()], 201);
         }
 

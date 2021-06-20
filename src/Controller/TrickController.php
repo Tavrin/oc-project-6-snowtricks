@@ -83,7 +83,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/tricks/{slug}/edit", name="trick_edit")
      */
-    public function editAction(Request $request, Trick $trick, SluggerInterface $slugger, MediaRepository $mediaRepository, TrickManager $trickManager): Response
+    public function editAction(Request $request, Trick $trick, TrickManager $trickManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
