@@ -9,15 +9,8 @@ class HeaderNav {
     }
 
     init() {
-        document.querySelectorAll('.flash').forEach(this.addFlash, this);
+        document.querySelectorAll('.flash').forEach(utils.addFlash, this);
         this.toggleBurger();
-    }
-
-    addFlash(alert) {
-        if (alert.querySelectorAll('.flash-close').length > 0) {
-            let button = alert.querySelectorAll('.flash-close')[0];
-            button.addEventListener('click', utils.addCloseEventOnParent);
-        }
     }
 
     toggleBurger() {

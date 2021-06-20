@@ -20,27 +20,12 @@ class CommentController extends AbstractController
     /**
      * @Route("/api/comments/new", name="api_new_comment")
      */
-    public function index(Request $request, CommentRepository $commentRepository, CommentManager $commentManager, TrickRepository $trickRepository): Response
+    public function index(Request $request, CommentManager $commentManager): Response
     {
-        $content = null;
-        if (!empty($request->getContent())) {
-            $content = $request->toArray();
-        }
+        $content = $commentManager->getResponseContent($request);
         $comment = new Comment();
-        $parentId = null;
-        if(isset($content['pid'])) {
-            if ($commentRepository->find($content['pid'])) {
-                $parentId = (int)$content['pid'];
-            }
-        }
 
-        $trickId = null;
-        if (isset($content['trickId'])) {
-            if ($trickRepository->find($content['trickId'])) {
-                $trickId = (int)$content['trickId'];
-            }
-        }
-        $form = $this->createForm(CommentFormType::class, $comment, ['parentId' => $parentId, 'trickId' => $trickId]);
+        $form = $this->createForm(CommentFormType::class, $comment, ['parentId' => $content['pid'], 'trickId' => $content['trickId']]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->has('trickId')) {
@@ -49,13 +34,8 @@ class CommentController extends AbstractController
             if ($form->has('parentId')) {
                 $parentId = $form->get('parentId')->getData();
             }
-            try {
-                $commentManager->saveComment($comment, $this->getUser(), $trickId, $parentId);
-            } catch (OptimisticLockException $e) {
-            } catch (ORMException $e) {
-                return new JsonResponse(['data' => 'error'], 500);
-            }
-            $this->addFlash('success', 'Commentaire posté');
+
+            $commentManager->saveComment($comment, $this->getUser(), $trickId ?? null, $parentId ?? null);
             return new JsonResponse(['status' => 201, 'data' => 'success', 'user' => $this->getUser()->getUsername()], 201);
         }
 

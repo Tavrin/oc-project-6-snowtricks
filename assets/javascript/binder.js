@@ -13,6 +13,9 @@ class Binder {
     }
 
     init() {
+        if (this.target && 'string' === typeof this.target) {
+            this.target = document.querySelector(`#${this.target}`);
+        }
         if ('text' === this.type || !this.type) {
             this.setTextEvent(this.elem);
         }
@@ -24,10 +27,6 @@ class Binder {
 
     setTextEvent(elem) {
         elem.addEventListener('keyup', () => {
-            if (this.target && 'string' === typeof this.target) {
-                this.target = document.querySelector(`#${this.target}`);
-            }
-
             this.value = elem.value;
             if (this.options['slugify']) {
                 this.value = utils.slugify(this.value);
@@ -38,10 +37,6 @@ class Binder {
 
     setImageEvent(elem) {
         elem.addEventListener('change', (e) => {
-            if (this.target && 'string' === typeof this.target) {
-                this.target = document.querySelector(`#${this.target}`);
-            }
-
             if (elem.dataset.from === 'file') {
                 let file    = elem.files[0];
                 let reader  = new FileReader();

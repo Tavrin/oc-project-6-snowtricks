@@ -39,7 +39,6 @@ export default class CommentResponse {
         utils.ajax('/api/comments/new', 'POST', formData).then(data => {
             let flash;
             let header = document.querySelector('.header');
-            console.log(data);
             if(data['status'] === 201) {
                 flash = `
                     <div class="flash flash-success ajax-flash" role="alert">
@@ -61,9 +60,7 @@ export default class CommentResponse {
             </div>
             `
                 message = document.createRange().createContextualFragment(message);
-
                 let container = document.querySelector(`#answers-${this.params.pid}`);
-                console.log(container);
                 container.insertBefore(message, container.firstChild);
                 this.target.remove();
             } else {
@@ -78,8 +75,6 @@ export default class CommentResponse {
 
             utils.addFlash(flash);
             header.appendChild(flash);
-
-
             this.state = false;
         })
     }

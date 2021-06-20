@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\CommentFormType;
 use App\Form\TrickFormType;
+use App\Manager\TrickManager;
 use App\Repository\MediaRepository;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -82,7 +83,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/tricks/{slug}/edit", name="trick_edit")
      */
-    public function editAction(Request $request, Trick $trick, SluggerInterface $slugger, MediaRepository $mediaRepository): Response
+    public function editAction(Request $request, Trick $trick, SluggerInterface $slugger, MediaRepository $mediaRepository, TrickManager $trickManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -95,22 +96,10 @@ class TrickController extends AbstractController
             return $this->redirectToRoute('user');
         }
 
-        if ($media = $trick->getMainMedia()) {
-            $media = '/uploads/tricks-images/'.$media->getFile();
-        } else {
-            $media = null;
-        }
-
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $media = str_replace('/uploads/tricks-images/', '', $form->get('mainMedia')->getData());
-            if (!empty($media = $mediaRepository->findOneBy(['file' => $media]))) {
-                $trick->setMainMedia($media);
-            }
-            $trick->setUpdatedAt(new DateTime);
-            $trick->setSlug($slugger->slug($trick->getName()));
-            $this->getDoctrine()->getManager()->flush();
+            $trickManager->saveTrick($trick, $form);
             $this->addFlash('success', 'Figure modifiée avec succès');
             return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
         }
