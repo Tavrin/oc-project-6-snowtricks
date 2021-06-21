@@ -1,0 +1,16 @@
+ <div class="form-zone">
+        <h1 class="zone-title">{{ video.id ? "Editer la vidéo : " ~ form.name.vars.value : 'Ajouter une nouvelle vidéo' }}</h1>
+        {{ form_start(form, {'attr' : {'class' : 'trick-editor-form'}}) }}
+        <div class="form-group">
+            {{ form_label(form.name, 'Nom de la vidéo', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.name, { attr: {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.url, 'Lien', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.url, { attr: {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-submit">
+            <button type="submit" class="btn">{{ video.id ? 'Editer' : 'Créer'}}</button>
+        </div>
+        {{ form_end(form) }}
+    </div>

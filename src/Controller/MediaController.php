@@ -5,8 +5,11 @@ namespace App\Controller;
 use App\Entity\Media;
 use App\Entity\Trick;
 use App\Entity\TrickMedia;
+use App\Entity\Video;
 use App\Form\MediaFormType;
+use App\Form\VideoFormType;
 use App\Helpers\MediaHelpers;
+use App\Manager\TrickManager;
 use App\Repository\MediaRepository;
 use App\Service\FileUploader;
 use DateTime;
@@ -60,6 +63,34 @@ class MediaController extends AbstractController
         }
 
         return new JsonResponse(['status' => 200,'response' => $this->render('media/new.html.twig', ['form' => $form->createView(), 'type' => 'new'])->getContent()]);
+    }
+
+    /**
+     * @Route("/api/tricks/{slug}/videos/new", name="api_new_video", methods={"POST", "GET"})
+     */
+    public function newVideoApi(Request $request, Trick $trick, TrickManager $trickManager): JsonResponse
+    {
+        $video = new Video();
+        $form = $this->createForm(VideoFormType::class, $video);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $trickManager->addVideo($video, $trick);
+            $video->setCreatedat(new DateTime);
+            $video->setTrick($trick);
+
+            $this->getDoctrine()->getManager()->persist($video);
+            $this->getDoctrine()->getManager()->flush();
+            return new JsonResponse(['status' => 201,'response' => 'Vidéo ajoutée avec succès']);
+
+        }
+
+        if ($form->isSubmitted()) {
+            return new JsonResponse(['status' => 500,'response' => 'Une erreur est survenue']);
+        }
+
+        return new JsonResponse(['status' => 200,'response' => $this->render('video/new.html.twig', ['form' => $form->createView(), 'video' => $video])->getContent()]);
     }
 
 

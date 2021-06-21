@@ -74,6 +74,7 @@ class TrickFormType extends AbstractType
     {
         return $this->groupRepository->findAll();
     }
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

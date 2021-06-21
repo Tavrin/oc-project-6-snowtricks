@@ -6,6 +6,7 @@ namespace App\Manager;
 
 use App\Entity\Media;
 use App\Entity\Trick;
+use App\Entity\Video;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormInterface;
@@ -34,5 +35,19 @@ class TrickManager
         $this->em->flush();
 
         return true;
+    }
+
+    public function addVideo(Video $video, Trick $trick)
+    {
+        $video->setCreatedat(new DateTime);
+        $video->setTrick($trick);
+
+        if ('youtube' === $video->getVideoType()->getName()) {
+            preg_match('#(\?v=|/v/)([-a-zA-Z0-9]+)#', $video->getUrl(), $link);
+            $video->setUrl($link[2]);
+        }
+
+        $this->em->persist($video);
+        $this->em->flush();
     }
 }
