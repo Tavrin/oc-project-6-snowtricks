@@ -4,25 +4,46 @@
 
 {% block body %}
     {% include 'partials/inc/media_modal.html.twig' %}
-    <div id="landing-zone">
-        <div id="landing-zone-text">
-            <h1>Snowtricks</h1>
-            <h3>Be fearless, be creative</h3>
+    <div class="landing-container">
+        <div id="landing-filter">
+        </div>
+        <div id="landing-zone">
+            <div id="landing-zone-text">
+                <h1 id="site-title">Snowtricks</h1>
+                <h3 id="site-slogan">Be fearless, be creative</h3>
+            </div>
         </div>
     </div>
     <section id="tricks-zone">
         <h2 class="zone-title">Les figures</h2>
     {% if content.tricks is defined and content.tricks is not empty %}
-        <div class="tricks-listing-grid">
+        {{ form_start(form, {'attr' : {'class' : 'trick-search-form', 'id': 'search-tricks-form'}}) }}
+        <div class="form-group">
+            {{ form_label(form.trickGroup, 'Groupe de figure', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.trickGroup, { attr: {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.name, { attr: {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-submit">
+            <button type="submit" class="btn">Rechercher</button>
+        </div>
+        {{ form_end(form) }}
+        <div class="tricks-listing-grid" id="tricks-listing">
             {% for trick in content.tricks %}
                 <div class="trick-item">
                     <div class="featured-item-image">
+                        <div class="overlay"></div>
                         <a href="/tricks/{{ trick.slug }}">{% include'/partials/inc/listing_media.html.twig' %}</a>
                     </div>
                     <span class="trick-item-info"><a href="/tricks/{{ trick.slug }}">{{ trick.name }}</a> {% if app.user and app.user.isVerified == true %}<span><a href="/tricks/{{ trick.slug }}/edit"><i class="fas fa-pen"></i></a> <a class="js-modal" data-type="confirm" data-target-id="mediaModal" href="/tricks/{{ trick.slug }}/delete"><i class="fas fa-trash"></i></a></span>{% endif %}</span>
                 </div>
             {% endfor %}
         </div>
+        {% if content.count > content.tricks|length %}
+            <a class="btn center" id="js-loadTricks" data-totalcount="{{ content.count }}" href="">Charger plus de figures</a>
+        {% endif %}
     {% else %}
         <h2 style="text-align:center">Il n'existe encore pas de figure</h2>
     {% endif %}

@@ -65,7 +65,6 @@ class Modal {
             if (this.target) {
                 this.target.classList.toggle('d-n');
 
-                console.log(utils.store.getKey(this.id+'-type'));
                 if (this.type !== utils.store.getKey(this.id+'-type')) {
                     utils.store.addKey(this.id+'-type', this.type);
                     this.resetModal();

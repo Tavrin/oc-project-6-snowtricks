@@ -25,6 +25,7 @@
         <h1 class="zone-title">{{ 'edit' == type ? "Editer la figure : " ~ editorForm.name.vars.value : 'Créer une nouvelle figure' }}</h1>
         {{ form_start(editorForm, {'attr' : {'class' : 'trick-editor-form'}}) }}
         <div class="form-group">
+            <div style="color: red!important;">{{ form_errors(editorForm.name) }}</div>
             {{ form_label(editorForm.name, 'Nom de la figure', {'label_attr': {'class': 'form-label'}}) }}
             {{ form_widget(editorForm.name, { attr: {'class': 'form-control'}}) }}
         </div>

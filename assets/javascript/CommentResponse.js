@@ -20,6 +20,8 @@ export default class CommentResponse {
             if (false === this.state) {
                 utils.ajax('/api/comments/new', 'POST', JSON.stringify(this.params)).then(data => {
                     let test = document.createRange().createContextualFragment(data.data);
+                    console.log(data.data);
+                    console.log(this.target);
                     this.target.appendChild(test);
                     let form =  this.target.querySelector('form');
                     if (null !== form) {
@@ -38,16 +40,8 @@ export default class CommentResponse {
         this.message = formData.get('comment_form[content]');
         utils.ajax('/api/comments/new', 'POST', formData).then(data => {
             let flash;
-            let header = document.querySelector('.header');
             if(data['status'] === 201) {
-                flash = `
-                    <div class="flash flash-success ajax-flash" role="alert">
-                        Commentaire rajouté avec succès
-                        <button class="flash-close"></button>
-                    </div>
-                `
-                flash = document.createRange().createContextualFragment(flash);
-
+                utils.addFlash('Le commentaire a été ajouté avec succès');
                 let message =
                     `
                     <div id="" class="comment-item new">
@@ -65,17 +59,9 @@ export default class CommentResponse {
                 container.insertBefore(message, container.firstChild);
                 this.target.remove();
             } else {
-                flash = `
-                    <div class="flash flash-danger ajax-flash" role="alert">
-                        Le commentaire n'a pas pu être ajouté
-                        <button class="flash-close"></button>
-                    </div>
-                `
-                flash = document.createRange().createContextualFragment(flash);
+                utils.addFlash('Le commentaire n\'a pas pu être ajouté', 'danger');
             }
 
-            utils.addFlash(flash);
-            header.appendChild(flash);
             this.state = false;
         })
     }

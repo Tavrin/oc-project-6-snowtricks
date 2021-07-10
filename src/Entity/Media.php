@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\MediaRepository;
@@ -53,6 +54,7 @@ class Media
 
     public function __construct()
     {
+        $this->createdAt = new DateTime();
         $this->trickMedia = new ArrayCollection();
     }
 

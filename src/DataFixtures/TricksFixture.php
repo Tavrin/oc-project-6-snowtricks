@@ -6,6 +6,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Group;
 use App\Entity\Trick;
+use App\Entity\VideoType;
 use App\Enum\GroupEnum;
 use App\Enum\TricksEnum;
 use DateTime;
@@ -15,6 +16,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class TricksFixture extends \Doctrine\Bundle\FixturesBundle\Fixture
 {
     private ?SluggerInterface $slugger = null;
+
     public function __construct(SluggerInterface $slugger)
     {
         $this->slugger = $slugger;
@@ -44,6 +46,11 @@ class TricksFixture extends \Doctrine\Bundle\FixturesBundle\Fixture
             $trick->setCreatedat(new DateTime);
             $manager->persist($trick);
         }
+
+        $videoType = new VideoType();
+        $videoType->setName('youtube');
+        $videoType->setCreatedat(new DateTime);
+        $manager->persist($videoType);
 
         $manager->flush();
     }

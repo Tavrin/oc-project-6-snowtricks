@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks - {{ content.user.username }}{% endblock %}
+
+{% block body %}
+    <div id="profile-zone">
+        <div id="profile-zone-left-side">
+            {% if app.user is defined and app.user is not empty and app.user.id is same as content.user.id %}
+                <a class="btn center profile-button" href="">Modifier le profil</a>
+            {% endif %}
+            <div>
+                <img src="{{ asset('build/images/user-placeholder.png') }}" class="avatar" alt="">
+            </div>
+            <h1>{{ content.user.username }}</h1>
+        </div>
+        <div id="profile-zone-right-side">
+            <h3>Derniers commentaires</h3>
+            {% for comment in content.comments %}
+            <div id="" class="comment-item answers-even">
+                <div class="w-100 d-f mb-1-5">
+                    <div>
+                        <span class="fw-900 d-b mb-0-5"><a class="comment-username" href="{{ comment.user.path??'#' }}">{{ comment.user.username?? 'utilisateur supprimé' }}</a></span>
+                    </div>
+                </div>
+                <p class="ta-l w-100">{{ comment.status == true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>' }}</p>
+                <div class="comment-item-metadata">
+                    <span class="comment-item-metadata-date-info">Posté le <span class="comment-item-metadata-date">{{ comment.createdAt|date("d/m/Y")}}</span></span>
+                    <a style="text-align: right" class="js-toggle comment-response" href="/tricks/{{ comment.trick.slug }}#comment-item-{{ comment.id }}">Contexte</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TrickModifyRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +32,11 @@ class TrickModify
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trickModifies")
      */
     private $user;
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
     public function getId(): ?int
     {

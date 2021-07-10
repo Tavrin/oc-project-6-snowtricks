@@ -9,6 +9,10 @@
             {{ form_label(form.url, 'Lien', {'label_attr': {'class': 'form-label'}}) }}
             {{ form_widget(form.url, { attr: {'class': 'form-control'}}) }}
         </div>
+     <div class="form-group">
+         {{ form_label(form.videoType, 'Type de vidéo', {'label_attr': {'class': 'form-label'}}) }}
+         {{ form_widget(form.videoType, { attr: {'class': 'form-control'}}) }}
+     </div>
         <div class="form-submit">
             <button type="submit" class="btn">{{ video.id ? 'Editer' : 'Créer'}}</button>
         </div>

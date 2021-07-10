@@ -1,7 +1,8 @@
 "use strict";
 
-class ToggleContent {
+export default class ToggleContent {
     constructor(elem) {
+        this.elem = elem;
         this.state = true;
         this.type = null;
         this.options = [];
@@ -15,6 +16,8 @@ class ToggleContent {
         if (elem.dataset.options) {
             this.options = JSON.parse(elem.dataset.options);
         }
+
+        console.log(document.querySelector('#' + elem.dataset.targetId));
 
         if (elem.dataset.targetId && document.querySelector('#' + elem.dataset.targetId) !== null) {
             this.target = document.querySelector('#' + elem.dataset.targetId);

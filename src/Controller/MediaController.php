@@ -77,11 +77,7 @@ class MediaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $trickManager->addVideo($video, $trick);
-            $video->setCreatedat(new DateTime);
-            $video->setTrick($trick);
 
-            $this->getDoctrine()->getManager()->persist($video);
-            $this->getDoctrine()->getManager()->flush();
             return new JsonResponse(['status' => 201,'response' => 'Vidéo ajoutée avec succès']);
 
         }

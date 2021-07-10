@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -18,6 +19,32 @@ class TrickRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Trick::class);
     }
+
+    public function findTricksListing(int $first = 0, int $limit = 5, string $trickName = null, $groupId = null): Paginator
+    {
+        $query = $this->createQueryBuilder('t')
+            ->orderBy('t.createdAt', 'DESC')
+            ->setFirstResult($first)
+            ->setMaxResults((int) $limit)
+        ;
+
+            if (isset($trickName)) {
+                $query->where('t.name like :name')
+                ->setParameter('name', '%'.$trickName.'%')
+                ;
+            }
+
+            if (isset($groupId)) {
+                $query->join('t.trickGroup', 'g')
+                    ->andWhere('g.id = :groupId')
+                    ->setParameter('groupId', $groupId)
+                    ;
+            }
+
+
+        return new Paginator($query, true);
+    }
+
 
     // /**
     //  * @return Trick[] Returns an array of Trick objects
