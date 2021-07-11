@@ -6,14 +6,17 @@ if (tricksLoad) {
         e.preventDefault();
 
         let count = document.querySelectorAll('.trick-item').length;
-
+        let container = document.querySelector('#tricks-listing');
+        let shimmers = setShimmers(container);
         utils.ajax(`/api/tricks/?count=${count}`).then(data => {
+            Array.prototype.forEach.call( shimmers, function( node ) {
+                node.parentNode.removeChild( node );
+            });
+
             if (500 === data.status) {
                 utils.addFlash('Une erreur est survenue', 'danger')
                 return;
             }
-
-            let container = document.querySelector('#tricks-listing')
 
             data.response['tricks'].forEach((trick) => {
                 let trickItem = `
@@ -32,7 +35,27 @@ if (tricksLoad) {
             if (document.querySelectorAll('.trick-item').length >= tricksLoad.dataset.totalcount) {
                 tricksLoad.style.display = 'none';
             }
+            if (document.querySelectorAll('.trick-item').length >= 15) {
+                document.querySelector('.landing-zone-arrow-up').classList.remove('d-n');
+            }
             console.log(data.response);
         });
     })
+}
+
+const setShimmers = (container, count = 5) => {
+    for (let i = 0; i < count; i++ ) {
+        let trickItem = `
+                    <div class="trick-item-shimmer">
+                        <div class="featured-item-image-shimmer shimmer">
+                        </div>
+                        <span class="trick-item-info-shimmer shimmer"></span>
+                    </div>
+                `
+
+        trickItem = document.createRange().createContextualFragment(trickItem);
+        container.appendChild(trickItem);
+    }
+
+    return container.querySelectorAll('.trick-item-shimmer');
 }

@@ -28,7 +28,8 @@ class SearchTricksFormType extends AbstractType
         $groups = $this->trickManager->setGroups();
         $builder
             ->add('name', TextType::class, [
-                'mapped' => false
+                'mapped' => false,
+                'required' => false
             ])
             ->add('trickGroup', ChoiceType::class, [
                 'mapped' => false,

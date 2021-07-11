@@ -48,7 +48,7 @@ class TrickManager
     {
         $trickModify = new TrickModify();
         $trickModify->setTrick($trick);
-        $trickModify->setUser();
+        $trickModify->setUser($user);
         $this->em->persist($trickModify);
         $this->em->flush();
     }

@@ -26,20 +26,37 @@ class CommentRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('c')
             ->orderBy('c.createdAt', 'DESC')
             ->setFirstResult($first)
-            ->setMaxResults($limit);
+        ;
+
+            if (isset($limit) && 0 !== $limit) {
+                $query->setMaxResults($limit);
+            }
 
         if (true === $onlyParents) {
+            dump('test');
             $query->where('c.parent is null');
             }
 
         return $query;
     }
 
-    public function trickFilter(QueryBuilder $query, int $trickId): QueryBuilder
+    public function trickFilter(QueryBuilder $query, int $trickId, int $parentId = null): QueryBuilder
     {
         $query->join('c.trick', 't')
-            ->andWhere('t.id = '. $trickId)
+            ->andWhere('t.id = :trickId')
+            ->setParameter('trickId', $trickId)
         ;
+
+        if (isset($parentId)) {
+            dump($parentId);
+            dump($query);
+            $query->join('c.parent', 'p')
+                ->andWhere('p.id = :parentId')
+                ->setParameter('parentId', $parentId)
+            ;
+
+            dump($query);
+        }
 
         return $query;
     }

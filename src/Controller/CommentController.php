@@ -42,12 +42,23 @@ class CommentController extends AbstractController
         if (!isset($queries['count']) || !isset($queries['id'])) {
             return new JsonResponse(['status' => 500,'response' => 'Une erreur est survenue']);
         }
+        $onlyParents = true;
+        $parentId = null;
+        $limit = 5;
+        if ( isset($queries['commentId'])) {
+            $queries['count'] = 0;
+            $limit = 0;
+            $parentId = $queries['commentId'];
+            $onlyParents = false;
+        }
 
-        $comments = $commentRepository->findCommentsListing($queries['count']);
-        $comments = $commentRepository->trickFilter($comments, $queries['id']);
+        $comments = $commentRepository->findCommentsListing($queries['count'], $onlyParents, $limit);
+        $comments = $commentRepository->trickFilter($comments, $queries['id'], $parentId);
         $comments = $commentRepository->paginate($comments);
         $content['count'] = count($comments);
+        dump($comments);
         $content['comments'] = $commentManager->hydrateCommentArray($comments->getQuery()->getResult());
+        dump($content);
         return new JsonResponse(['status' => 200, 'response' => $content], 200);
     }
 }

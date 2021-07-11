@@ -12,6 +12,7 @@
                 <h1 id="site-title">Snowtricks</h1>
                 <h3 id="site-slogan">Be fearless, be creative</h3>
             </div>
+            <a href="#tricks-zone"><i class="landing-zone-arrow-down fas fa-arrow-down"></i></a>
         </div>
     </div>
     <section id="tricks-zone">
@@ -44,6 +45,8 @@
         {% if content.count > content.tricks|length %}
             <a class="btn center" id="js-loadTricks" data-totalcount="{{ content.count }}" href="">Charger plus de figures</a>
         {% endif %}
+        <a href="#tricks-zone" class="landing-zone-arrow-up d-n"><i class="fas fa-arrow-up"></i></a>
+
     {% else %}
         <h2 style="text-align:center">Il n'existe encore pas de figure</h2>
     {% endif %}

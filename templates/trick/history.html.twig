@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks - {{ content.trick.name }} : historique de modifications{% endblock %}
+{% block body %}
+
+    <ul>
+        {% dump %}
+        {% for trickModify in content.trickModifies %}
+            <li>{{ trickModify.id }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

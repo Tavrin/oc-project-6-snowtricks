@@ -17,8 +17,6 @@ export default class ToggleContent {
             this.options = JSON.parse(elem.dataset.options);
         }
 
-        console.log(document.querySelector('#' + elem.dataset.targetId));
-
         if (elem.dataset.targetId && document.querySelector('#' + elem.dataset.targetId) !== null) {
             this.target = document.querySelector('#' + elem.dataset.targetId);
         }

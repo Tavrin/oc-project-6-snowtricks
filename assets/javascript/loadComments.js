@@ -7,20 +7,37 @@ let commentsLoad = document.querySelector('#js-loadComments');
 if (commentsLoad) {
     commentsLoad.addEventListener('click', (e) => {
         e.preventDefault();
-
+        let container = document.querySelector('#comments-zone')
         let count = e.currentTarget.dataset.currentCount;
         let trickId = e.currentTarget.dataset.trickId;
         let target = e.currentTarget;
-        utils.ajax(`/api/comments?count=${count}&id=${trickId}`).then(data => {
-            if (500 === data.status) {
-                utils.addFlash('Une erreur est survenue', 'danger')
-                return;
-            }
+        getComments(container, count, trickId, target);
 
-            let container = document.querySelector('#comments-zone')
-            console.log(target);
-            data.response['comments'].forEach((comment) => {
-                let commentItem = `
+    })
+}
+
+let getComments = (container, count, trickId, target, commentId = null) => {
+    let request = `/api/comments?count=${count}&id=${trickId}`;
+    if (commentId) {
+        request += `&commentId=${commentId}`;
+    }
+    utils.ajax(request).then(data => {
+        if (500 === data.status) {
+            utils.addFlash('Une erreur est survenue', 'danger')
+            return;
+        }
+
+        data.response['comments'].forEach((comment) => {
+            let commentContainer = setCommentItem(comment, container);
+            getComments(commentContainer, count, trickId, target, comment.id)
+            });
+
+        target.dataset.currentCount = data.response['count'];
+    })
+}
+
+let setCommentItem = (comment, container) => {
+    let commentItem = `
                     <div class="comment-item answers-even">
                         <div class="w-100 d-f mb-1-5">
                             <div>
@@ -34,20 +51,17 @@ if (commentsLoad) {
                         </div>
                         <div class="d-n" id="response-${comment.id}">
                         </div>
+                        <div id="answers-${comment.id}">
+                        </div>
                     </div>
                 `
 
-                commentItem = document.createRange().createContextualFragment(commentItem);
-                let response = commentItem.querySelector('.comment-response');
-                container.appendChild(commentItem);
-                new ToggleContent(response);
-                response = new CommentResponse(response);
-                response.setListener();
+    commentItem = document.createRange().createContextualFragment(commentItem);
+    let response = commentItem.querySelector('.comment-response');
+    container.appendChild(commentItem);
+    new ToggleContent(response);
+    response = new CommentResponse(response);
+    response.setListener();
 
-            });
-
-            target.dataset.currentCount = data.response['count'];
-            console.log(data.response);
-        });
-    })
-}
+    return container.querySelector('#answers-'+comment.id);
+};

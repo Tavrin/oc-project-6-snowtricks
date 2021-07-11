@@ -29,5 +29,8 @@
         <main id="main">
         {% block body %}{% endblock %}
         </main>
+        {% block footer %}
+            {% include 'partials/footer.html.twig' %}
+        {% endblock %}
     </body>
 </html>

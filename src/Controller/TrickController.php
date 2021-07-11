@@ -134,6 +134,18 @@ class TrickController extends AbstractController
     }
 
     /**
+     * @Route("/tricks/{slug}/history", name="trick_history")
+     */
+    public function historyAction(Request $request, Trick $trick): Response
+    {
+        $content['trickModifies'] = $trick->getTrickModifies();
+        $content['trick'] = $trick;
+        return $this->render('trick/history.html.twig', [
+            'content' => $content
+        ]);
+    }
+
+    /**
      * @Route("/api/tricks", name="tricks_api_get")
      */
     public function apiGetTricks(Request $request, TrickRepository $trickRepository, TrickManager $trickManager): JsonResponse
