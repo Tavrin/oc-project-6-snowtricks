@@ -27,4 +27,12 @@ class IndexController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/mentions-legales", name="mentions_legales")
+     */
+    public function legalMentionsAction(): Response
+    {
+        return $this->render('index/legal-mentions.html.twig');
+    }
 }

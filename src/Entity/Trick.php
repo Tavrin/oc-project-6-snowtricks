@@ -53,7 +53,7 @@ class Trick
     private $trickMedia;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickModify::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=TrickModify::class, mappedBy="trick", cascade={"remove"})
      */
     private $trickModifies;
 

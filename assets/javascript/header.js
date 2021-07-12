@@ -9,7 +9,7 @@ class HeaderNav {
     }
 
     init() {
-        document.querySelectorAll('.flash').forEach(utils.addFlash, this);
+        document.querySelectorAll('.flash').forEach(utils.setFLashEvent, this);
         this.toggleBurger();
     }
 

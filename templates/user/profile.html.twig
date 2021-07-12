@@ -2,16 +2,19 @@
 
 {% block title %}Snowtricks - {{ content.user.username }}{% endblock %}
 
+{% set media = content.user.picture ? '/uploads/tricks-images/' ~ content.user.picture : asset('build/images/user-placeholder.png') %}
+
 {% block body %}
     <div id="profile-zone">
         <div id="profile-zone-left-side">
             {% if app.user is defined and app.user is not empty and app.user.id is same as content.user.id %}
-                <a class="btn center profile-button" href="">Modifier le profil</a>
+                <a class="btn center profile-button" href="/settings/profile">Modifier le profil</a>
             {% endif %}
             <div>
-                <img src="{{ asset('build/images/user-placeholder.png') }}" class="avatar" alt="">
+                <img src="{{ media }}" class="avatar" alt="">
             </div>
             <h1>{{ content.user.username }}</h1>
+            <p>{{ content.user.description }}</p>
         </div>
         <div id="profile-zone-right-side">
             <h3>Derniers commentaires</h3>

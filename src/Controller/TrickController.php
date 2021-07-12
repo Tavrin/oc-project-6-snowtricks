@@ -78,7 +78,7 @@ class TrickController extends AbstractController
             $trick->setSlug($slugger->slug($trick->getName()));
             $this->getDoctrine()->getManager()->persist($trick);
             $this->getDoctrine()->getManager()->flush();
-            $trickManager->createTrickAudit($trick, $this->getUser());
+            $trickManager->createTrickAudit($trick, $this->getUser(), true);
             $this->addFlash('success', 'Figure créée avec succès');
             return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
         }
@@ -106,10 +106,12 @@ class TrickController extends AbstractController
         }
 
         $form = $this->createForm(TrickFormType::class, $trick);
+        $oldTrick = clone $this->getDoctrine()->getRepository(Trick::class)->findOneBy(['id' => $trick->getId()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $trickManager->saveTrick($trick, $form);
-            $trickManager->createTrickAudit($trick, $this->getUser());
+            $trick = $trickManager->setTrickMainMedia($trick, $form);
+            $trickManager->createTrickAudit($trick, $this->getUser(), false, $oldTrick);
+            $trickManager->saveTrick($trick);
             $this->addFlash('success', 'Figure modifiée avec succès');
             return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
         }
@@ -140,6 +142,7 @@ class TrickController extends AbstractController
     {
         $content['trickModifies'] = $trick->getTrickModifies();
         $content['trick'] = $trick;
+        dump($content);
         return $this->render('trick/history.html.twig', [
             'content' => $content
         ]);
@@ -157,6 +160,9 @@ class TrickController extends AbstractController
 
         $tricks = $trickManager->getTricks($queries, $trickRepository);
         $content['count'] = count($tricks);
+        if ($this->getUser()) {
+            $content['loggedIn'] = true;
+        }
         $content['tricks'] = $trickManager->hydrateTrickArray($tricks->getQuery()->getResult());
         return new JsonResponse(['status' => 200, 'response' => $content], 200);
     }

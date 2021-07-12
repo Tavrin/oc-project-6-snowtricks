@@ -30,13 +30,18 @@ class TrickManager
         $this->slugger = $slugger;
     }
 
-    public function saveTrick(Trick $trick, FormInterface $form): bool
+    public function setTrickMainMedia(Trick $trick, FormInterface $form)
     {
         $media = str_replace('/uploads/tricks-images/', '', $form->get('mainMedia')->getData());
         if (!empty($media = $this->em->getRepository(Media::class)->findOneBy(['file' => $media]))) {
             $trick->setMainMedia($media);
         }
 
+        return $trick;
+    }
+
+    public function saveTrick(Trick $trick): bool
+    {
         $trick->setUpdatedAt(new DateTime);
         $trick->setSlug($this->slugger->slug($trick->getName()));
         $this->em->flush();
@@ -44,11 +49,32 @@ class TrickManager
         return true;
     }
 
-    public function createTrickAudit(Trick $trick, $user)
+    public function createTrickAudit(Trick $trick, $user, bool $isNewTrick = false, $oldTrick = null)
     {
         $trickModify = new TrickModify();
         $trickModify->setTrick($trick);
         $trickModify->setUser($user);
+        if (true === $isNewTrick) {
+            $trickModify->setType('new');
+        } else {
+            $modifies = null;
+            if ($trick->getName() !== $oldTrick->getName()) {
+                $modifies[] = 'nom de la figure';
+            }
+            if ($trick->getDescription() !== $oldTrick->getDescription()) {
+                $modifies[] = 'description';
+            }
+            if ($trick->getTrickGroup() !== $oldTrick->getTrickGroup()) {
+                $modifies[] = 'groupe de la figure';
+            }
+
+            if ($trick->getMainMedia() !== $oldTrick->getMainMedia()) {
+                $modifies[] = 'média principal';
+            }
+
+            $trickModify->setType('edit');
+            $trickModify->setModifiedFields($modifies);
+        }
         $this->em->persist($trickModify);
         $this->em->flush();
     }

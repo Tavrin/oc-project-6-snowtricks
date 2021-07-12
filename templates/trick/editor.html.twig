@@ -39,7 +39,7 @@
         </div>
         <div id="mediaShow" class="js-filler" data-type="image" data-id="previewImage" data-src="{{ media }}"></div>
         {{ form_widget(editorForm.mainMedia, {'value': media }) }}
-        <div class="editor-media-buttons">
+        <div class="editor-media-buttons" {% if trick.id is not defined or trick.id is empty %}style="display:none"{% endif %}>
         {{ form_rest(editorForm) }}
         </div>
         <div class="form-submit">

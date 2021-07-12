@@ -109,6 +109,7 @@ class Modal {
             let modal = this.target.querySelector('.modal');
             let newMediaButton = document.createElement('button');
             newMediaButton.id = 'addMediaButton';
+            newMediaButton.classList.add('btn');
             newMediaButton.innerText = `Ajouter une ${this.type}`;
             modal.insertBefore(newMediaButton, modal.children[2]);
 
@@ -172,12 +173,12 @@ class Modal {
 
     addImageToContainer(item, container, type = 'add') {
         if ('add' === type) {
-            type = `<button class="button-bb-wc modal-media-button-add" data-id="${item['id']}" >Ajouter à la figure</button>`;
+            type = `<button class="btn-modal modal-media-button-add" data-id="${item['id']}" >Ajouter à la figure</button>`;
         } else if('remove' === type) {
             type =
                 `
-                <button class="button-bb-wc modal-media-button-main" data-path="${item['file']}">Sélectionner comme média principal</button>
-                <button class="button-bb-wc modal-media-button-remove" data-id="${item['id']}" >Supprimer de la figure</button>
+                <button class="btn-modal modal-media-button-main" data-path="${item['file']}">Sélectionner comme média principal</button>
+                <button class="btn-modal modal-media-button-remove" data-id="${item['id']}" >Supprimer de la figure</button>
                 `
             ;
         }
@@ -188,7 +189,7 @@ class Modal {
             <div class="modal-image-info">
                 <p>${item.name}</p>
                 ${type}
-                <button class="button-bb-wc modal-media-button-delete" data-id="${item['id']}" >Modifier</button>
+                <button class="btn-modal modal-media-button-delete" data-id="${item['id']}" >Modifier</button>
             </div>
             `
         ;
@@ -315,6 +316,7 @@ class Modal {
             slug = metadata.slug ?? null ;
         }
 
+        console.log(slug);
         return slug;
     }
 

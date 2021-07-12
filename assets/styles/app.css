@@ -30,6 +30,10 @@ p a,.comment-post a {
     color: white;
 }
 
+#main {
+    flex: 1;
+}
+
 footer {
     background-color: #f3f3f3;
 }
@@ -98,7 +102,7 @@ footer {
 }
 
 .shimmer {
-    background: linear-gradient(to right, #eff1f3 4%, #ececec 25%, #eff1f3 36%);
+    background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
     background-size: 1000px 100%;
     display: inline-block;
     position: relative;
@@ -156,6 +160,14 @@ footer {
     margin-left: 1rem;
 }
 
+.history-item {
+    width: 70%;
+    margin: 1rem auto;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    border-bottom: 1px solid #DFE1E7;
+}
+
 #trick-zone-title-div {
     text-align: center;
     margin-left: auto;
@@ -185,6 +197,16 @@ footer {
     height: 10rem;
 }
 
+#legal-mentions {
+    max-width: 80%;
+    margin: 3rem auto;
+}
+
+#legal-mentions article {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
 .tricks-listing-grid {
     display: flex;
     flex-direction: row;
@@ -201,6 +223,7 @@ footer {
 .form-zone {
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 2rem;
     width: 90%;
     padding-top: 5rem;
 }
@@ -226,14 +249,26 @@ footer {
     flex-direction: column;
 }
 
+.form-group-row {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+
 .form-label {
     padding-bottom: .5rem;
 }
 
-.trick-editor-form {
+.trick-editor-form, .profile-editor-form {
     width:40%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.profile-editor-form {
+    width: 60%;
 }
 
 .zone-title {
@@ -248,6 +283,16 @@ footer {
     text-align: center;
     display: flex;
     align-items: center;
+    justify-content: center;
+}
+
+.form-submit button{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 4rem;
+    padding-right: 4rem;
 }
 
 .btn {
@@ -255,6 +300,21 @@ footer {
     color: white;
     padding: 1rem 2rem;
     font-weight: 800;
+    border-radius: 5px;
+}
+
+.btn-new-trick {
+    width: 9rem;
+    margin-left: 1rem;
+}
+
+.btn-modal {
+    font-size: 14px;
+    background: #55556a;
+    margin-bottom: .5rem;
+    color: white;
+    padding: .5rem 1rem;
+    font-weight: 600;
     border-radius: 5px;
 }
 
@@ -274,6 +334,13 @@ footer {
     font-size: 3rem;
     align-self: flex-end;
     margin-right: 3rem;
+}
+
+.landing-tricks-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 95%;
 }
 
 .div-history {
@@ -306,9 +373,13 @@ footer {
 
 .editor-media-buttons {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     width: 100%;
-    margin: 2rem;
+    margin-bottom: 2rem;
+}
+
+.editor-media-buttons div {
+    margin-right: 1rem;
 }
 
 .trick-show-metadata-item {
@@ -327,6 +398,37 @@ footer {
     display: flex;
     flex-direction: column;
     border-bottom: 1px solid #DFE1E7;
+}
+
+.comment-item-shimmer {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-content-shimmer {
+    width: 100%;
+    height:5rem;
+    margin-bottom: 1rem;
+}
+
+.comment-metadata-shimmer-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.comment-metadata-shimmer {
+    width: 20%;
+    height:2rem;
+}
+
+.comment-answer-shimmer {
+    width: 10%;
+    height:2rem;
 }
 
 .comment-item .comment-item {
@@ -364,7 +466,7 @@ footer {
     background-color: white!important;
 }
 
-.comment-item .comment-username {
+.comment-username {
     font-weight: 800;
     color: #1e81d2;
 }
@@ -427,11 +529,16 @@ footer {
 
 .modal-image-item {
     display: flex;
-    max-width: 20rem;
+    max-width: 10rem;
     flex-direction: column;
     align-items: center;
     padding: 1rem;
 }
+
+.modal-image-item img {
+   width: 100%;
+}
+
 
 .fade {
     transition: opacity 15s linear;
@@ -508,29 +615,44 @@ footer {
     margin-bottom: 4rem;
 }
 
-#profile-zone {
+#history-zone {
+    display: flex;
+    flex-direction: column;
     width: 80%;
-    margin-top: 4rem;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 4rem;
+}
+
+#profile-zone {
+    width: 80%;
+    margin: 4rem auto;
     display: flex;
     flex-direction: row;
 }
 
-#profile-zone-left-side {
+#profile-zone-left-side, .settings-zone-left {
     text-align: center;
     width: 25%;
     padding-left: 1rem;
     padding-right: 1rem;
 }
 
-#profile-zone-right-side {
+.settings-zone-left {
+    width: 15%;
+}
+
+#profile-zone-right-side, .settings-zone-right {
     width: 75%;
     padding-left: 1rem;
     padding-right: 1rem;
 }
 
-#profile-zone-left-side .avatar {
+.settings-zone-right {
+    width: 85%;
+}
+
+#profile-zone-left-side .avatar, .settings-zone-right .avatar {
     width: 15rem;
     margin-bottom: 1rem;
     height: 15rem;
@@ -567,9 +689,13 @@ footer {
 /* flash */
 .flash {
     z-index: 9999;
-    max-width: 70%;
-    position: relative;
-    padding: 1rem 1rem;
+    right: 0;
+    left: 0;
+    top: 3rem;
+    max-width: 30rem;
+    width: max-content;
+    position: fixed;
+    padding: 1rem 4rem 1rem 1rem;
     margin: auto auto 1rem;
     border: 1px solid transparent;
     border-radius: .25rem;
@@ -582,6 +708,8 @@ footer {
 }
 
 .ajax-flash {
+    z-index: 9999;
+    border-radius: .25rem;
     position: fixed;
     right: 0;
     left: 0;

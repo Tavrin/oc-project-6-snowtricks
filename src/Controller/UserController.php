@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ModifyProfileFormType;
 use App\Repository\CommentRepository;
+use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,9 +19,34 @@ class UserController extends AbstractController
     public function index(): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $user = $this->getUser();
 
         return $this->render('user/index.html.twig');
+    }
+
+    /**
+     * @Route("/settings/profile", name="user_profile_settings")
+     */
+    public function profileSettingsAction(Request $request, FileUploader $fileUploader): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $user = $this->getUser();
+        $form = $this->createForm(ModifyProfileFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('file')->getData();
+            if ($file) {
+                $newFilename = $fileUploader->upload($file);
+                $user->setPicture($newFilename);
+            }
+
+            $this->getDoctrine()->getManager()->flush();
+        }
+
+        return $this->render('user/profile-settings.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**

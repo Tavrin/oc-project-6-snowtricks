@@ -95,6 +95,9 @@ class CommentManager
             $content[$key]['content'] = $entity->getContent();
             $content[$key]['status'] = $entity->getStatus();
             $content[$key]['user'] = $entity->getUser()->getUsername();
+            if ($entity->getParent()) {
+                $content[$key]['parentId'] = $entity->getParent()->getId();
+            }
             $content[$key]['createdAt'] = $entity->getCreatedAt()->format("d/m/Y");
         }
 

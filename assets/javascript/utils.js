@@ -84,11 +84,16 @@ utils.addFlash = (message, type = 'success') => {
         flash = document.createRange().createContextualFragment(flash);
     }
 
+    this.setFLashEvent(flash);
+    header.appendChild(flash);
+}
+
+utils.setFLashEvent = (flash) => {
     if (flash.querySelectorAll('.flash-close').length > 0) {
         let button = flash.querySelectorAll('.flash-close')[0];
         button.addEventListener('click', utils.addCloseEventOnParent);
     }
-    header.appendChild(flash);
+
 }
 
 export {utils};

@@ -19,12 +19,19 @@ if (tricksLoad) {
             }
 
             data.response['tricks'].forEach((trick) => {
+                let editAction = '';
+                if (true === data.response['loggedIn']) {
+                    editAction = `<span><a href="/tricks/${trick.slug }/edit"><i class="fas fa-pen"></i></a>
+                    <a class="js-modal" data-type="confirm" data-target-id="mediaModal" href="/tricks/${trick.slug }/delete"><i class="fas fa-trash"></i></a>
+                </span>`
+                }
+
                 let trickItem = `
                     <div class="trick-item">
                         <div class="featured-item-image">
                             <a href="/tricks/${trick.slug}"><img src="${trick['mainMedia']}" alt="" class="listing_media"></a>
                         </div>
-                        <span class="trick-item-info"><a href="/tricks/${trick.slug}">${trick.name}</a></span>
+                        <span class="trick-item-info"><a href="/tricks/${trick.slug}">${trick.name}</a>${editAction}</span>
                     </div>
                 `
 

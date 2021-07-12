@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks - Paramètres utilisateur{% endblock %}
+
+{% set media = app.user.picture ? '/uploads/tricks-images/' ~ app.user.picture : asset('build/images/user-placeholder.png') %}
+
+{% block body %}
+<div id="profile-zone">
+    <div class="settings-zone-left">
+    </div>
+        <div class="settings-zone-right">
+            <h1 style="text-align: center">Profil</h1>
+            <a class="btn center" href="/users/{{ app.user.slug }}">Retour au profil</a>
+            {{ form_start(form, {'attr' : {'class' : 'profile-editor-form'}}) }}
+            <div class="form-group-row">
+                <img id="profile-settings-image" src="{{ media }}" class="avatar" alt="">
+                <div class="form-group">
+                {{ form_label(form.file, 'Image de profil', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.file, {'value': media }) }}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.description, { attr: {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-submit">
+                <button type="submit" class="btn">Modifier</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

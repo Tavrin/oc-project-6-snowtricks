@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Trick;
 use App\Form\CommentFormType;
 use App\Manager\CommentManager;
 use App\Repository\CommentRepository;
@@ -45,18 +46,22 @@ class CommentController extends AbstractController
         $onlyParents = true;
         $parentId = null;
         $limit = 5;
-        if ( isset($queries['commentId'])) {
+        if (isset($queries['commentId'])) {
             $queries['count'] = 0;
             $limit = 0;
             $parentId = $queries['commentId'];
             $onlyParents = false;
         }
 
+        $trick = $this->getDoctrine()->getRepository(Trick::class)->find($queries['id']);
+        $content['totalCount'] = count($trick->getComments());
+
         $comments = $commentRepository->findCommentsListing($queries['count'], $onlyParents, $limit);
         $comments = $commentRepository->trickFilter($comments, $queries['id'], $parentId);
+        dump($content['totalCount']);
         $comments = $commentRepository->paginate($comments);
         $content['count'] = count($comments);
-        dump($comments);
+        dump($content);
         $content['comments'] = $commentManager->hydrateCommentArray($comments->getQuery()->getResult());
         dump($content);
         return new JsonResponse(['status' => 200, 'response' => $content], 200);

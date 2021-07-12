@@ -2,11 +2,21 @@
 
 {% block title %}Snowtricks - {{ content.trick.name }} : historique de modifications{% endblock %}
 {% block body %}
-
+<section id="history-zone">
+    <h1 id="trick-zone-title-div">Historique de modifications de la figure : {{ content.trick.name }}</h1>
     <ul>
-        {% dump %}
         {% for trickModify in content.trickModifies %}
-            <li>{{ trickModify.id }}</li>
+            {% dump(trickModify) %}
+            {% if trickModify.type == 'edit' %}
+                <li class="history-item">Modification apportée par <a  class="comment-username" href="/users/{{ trickModify.user.slug }}">{{ trickModify.user.username }}</a> le {{ trickModify.createdAt|date("d/m/Y") }} - Champ(s) modifié(s) :
+                    {% for field in trickModify.modifiedFields %}
+                        {{ field }}{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                </li>
+            {% elseif trickModify.type == 'new' %}
+                <li class="history-item">Création de la figure par <a  class="comment-username" href="/users/{{ trickModify.user.slug }}">{{ trickModify.user.username }}</a> le {{ trickModify.createdAt|date("d/m/Y") }}</li>
+            {% endif %}
         {% endfor %}
     </ul>
+</section>
 {% endblock %}

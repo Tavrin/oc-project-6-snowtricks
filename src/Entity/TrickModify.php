@@ -24,7 +24,7 @@ class TrickModify
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="trickModifies")
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="trickModifies", cascade="persist")
      */
     private $trick;
 
@@ -32,6 +32,16 @@ class TrickModify
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trickModifies")
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $modifiedFields = [];
 
     public function __construct()
     {
@@ -75,6 +85,30 @@ class TrickModify
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getModifiedFields(): ?array
+    {
+        return $this->modifiedFields;
+    }
+
+    public function setModifiedFields(?array $modifiedFields): self
+    {
+        $this->modifiedFields = $modifiedFields;
 
         return $this;
     }
