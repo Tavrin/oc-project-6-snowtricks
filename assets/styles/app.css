@@ -365,6 +365,7 @@ footer {
 
 .trick-show-info {
     width: 70%;
+    text-transform: capitalize;
 }
 
 .trick-show-metadata {
@@ -631,6 +632,13 @@ footer {
     flex-direction: row;
 }
 
+#settings-zone {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+}
+
 #profile-zone-left-side, .settings-zone-left {
     text-align: center;
     width: 25%;
@@ -639,7 +647,11 @@ footer {
 }
 
 .settings-zone-left {
-    width: 15%;
+    min-height: 80vh;
+    padding-bottom: 3rem;
+    padding-right: 0;
+    border-right: 1px solid #DFE1E7;
+    width: 20%;
 }
 
 #profile-zone-right-side, .settings-zone-right {
@@ -649,7 +661,38 @@ footer {
 }
 
 .settings-zone-right {
-    width: 85%;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    width: 80%;
+    padding-right: 10rem;
+    display: flex;
+    flex-direction: column;
+    padding-left: 10rem;
+}
+
+.settings-bar-left-item {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid #DFE1E7;
+    padding: 2rem;
+    text-align: left;
+}
+
+.settings-bar-left-item p {
+    font-size: .9rem;
+    color: #64748B;
+}
+
+nav .settings-bar-left-item .fas {
+    color: #707E94;
+    margin-right: 1rem;
+    font-size: 1.5rem;
+}
+
+nav .settings-bar-left-item:hover {
+    background-color: #F7FAFF;
 }
 
 #profile-zone-left-side .avatar, .settings-zone-right .avatar {
@@ -657,6 +700,12 @@ footer {
     margin-bottom: 1rem;
     height: 15rem;
 }
+
+.comment-item .avatar {
+    width: 3rem;
+    height: 3rem;
+}
+
 .profile-button {
     display: block;
     width: 37%;
@@ -665,6 +714,8 @@ footer {
 .avatar {
     border-radius: 50%;
 }
+
+
 
 #logo {
     font-weight: 900;

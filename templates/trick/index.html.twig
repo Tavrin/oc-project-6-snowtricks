@@ -19,7 +19,7 @@
     {% if level > 0 %}<div class="comment-item-body">{% endif %}
         <div class="w-100 d-f mb-1-5">
             <div>
-                <span class="fw-900 d-b mb-0-5"><a class="comment-username" href="{{ comment.user.slug? '/users/' ~ comment.user.slug : '#' }}">{{ comment.user.username?? 'utilisateur supprimé' }}</a></span>
+                <span class="fw-900 d-b mb-0-5"><img class="avatar" src="{{ comment.user.picture ? '/uploads/tricks-images/' ~ comment.user.picture : asset('build/images/user-placeholder.png') }}" alt=""><a class="comment-username" href="{{ comment.user.slug? '/users/' ~ comment.user.slug : '#' }}">{{ comment.user.username?? 'utilisateur supprimé' }}</a></span>
             </div>
         </div>
         <p class="ta-l w-100">{{ comment.status == true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>' }}</p>
@@ -86,7 +86,6 @@
             </div>
                 <h2 class="trick-show-section-title">Description</h2>
             <div class="trick-show-info">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid aut excepturi exercitationem omnis veritatis voluptate. Assumenda libero magni neque reiciendis rerum tenetur unde. Aliquid at inventore molestiae mollitia necessitatibus nihil non quasi reprehenderit soluta tenetur. Accusamus accusantium aperiam architecto aut cum cupiditate delectus distinctio earum eum eveniet expedita hic in inventore ipsum laboriosam libero magnam molestias neque nisi nostrum, nulla perferendis porro praesentium quidem recusandae repellat, repellendus saepe sed vel voluptate. Dolores facere iure non quod vel! Ad, cum cupiditate delectus deleniti ex ipsa laboriosam minima modi nulla praesentium quas saepe sequi unde voluptates voluptatum. Assumenda consectetur dignissimos facere, hic id magni maxime mollitia obcaecati perferendis praesentium provident, recusandae totam veniam! Amet aperiam at corporis cupiditate debitis et, facilis fuga illo nam, odio, quibusdam quis quisquam ratione rem sequi ut voluptas voluptatem? Alias ducimus eaque enim, ex hic quas veniam. Accusamus aliquam animi aperiam eius eum fuga fugit ipsum itaque iure iusto nam necessitatibus nihil nostrum omnis quia quidem ratione sequi sunt, vel voluptatum! Architecto nisi pariatur perspiciatis tempore. Ab ad adipisci, aliquam aut autem consequuntur, cupiditate ea eaque magnam maxime minima natus neque perferendis provident quisquam reiciendis, repudiandae voluptas. Ex expedita facere facilis illo laboriosam modi necessitatibus nemo nobis quia rem? Aut, minima sint? Ad amet assumenda, beatae cumque fugit iste magnam nulla ullam vitae voluptatum. A accusamus aliquam aliquid aperiam blanditiis dignissimos ea eaque est facere hic impedit iste, minima, neque nobis quibusdam ratione, recusandae rem repellat sed sequi sint tempore tenetur unde ut voluptas. Beatae esse itaque neque quis! Aliquam, quia.</p>
                 <p>{{ content.trick.description }}</p>
                 <div class="trick-show-metadata">
                     <span class="trick-show-metadata-item m-r-1">Création : {{ content.trick.createdAt|date("d M Y") }}</span>

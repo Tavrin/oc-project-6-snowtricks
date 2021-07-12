@@ -6,7 +6,6 @@
     <h1 id="trick-zone-title-div">Historique de modifications de la figure : {{ content.trick.name }}</h1>
     <ul>
         {% for trickModify in content.trickModifies %}
-            {% dump(trickModify) %}
             {% if trickModify.type == 'edit' %}
                 <li class="history-item">Modification apportée par <a  class="comment-username" href="/users/{{ trickModify.user.slug }}">{{ trickModify.user.username }}</a> le {{ trickModify.createdAt|date("d/m/Y") }} - Champ(s) modifié(s) :
                     {% for field in trickModify.modifiedFields %}

@@ -142,7 +142,6 @@ class TrickController extends AbstractController
     {
         $content['trickModifies'] = $trick->getTrickModifies();
         $content['trick'] = $trick;
-        dump($content);
         return $this->render('trick/history.html.twig', [
             'content' => $content
         ]);

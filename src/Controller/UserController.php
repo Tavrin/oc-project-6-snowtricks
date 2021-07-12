@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\ModifyProfileFormType;
+use App\Form\UserChangesFormType;
 use App\Repository\CommentRepository;
 use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,12 @@ class UserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        return $this->render('user/index.html.twig');
+        $user = $this->getUser();
+        $form = $this->createForm(UserChangesFormType::class, $user);
+
+        return $this->render('user/index.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**

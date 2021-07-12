@@ -70,7 +70,7 @@ Create a production frontend build
 
 Clear the Symfony cache
 ```
-APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear
+php bin/console cache:clear
 ```
 
 Your web application is ready for use, you can login with the following credentials :

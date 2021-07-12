@@ -58,12 +58,9 @@ class CommentController extends AbstractController
 
         $comments = $commentRepository->findCommentsListing($queries['count'], $onlyParents, $limit);
         $comments = $commentRepository->trickFilter($comments, $queries['id'], $parentId);
-        dump($content['totalCount']);
         $comments = $commentRepository->paginate($comments);
         $content['count'] = count($comments);
-        dump($content);
         $content['comments'] = $commentManager->hydrateCommentArray($comments->getQuery()->getResult());
-        dump($content);
         return new JsonResponse(['status' => 200, 'response' => $content], 200);
     }
 }

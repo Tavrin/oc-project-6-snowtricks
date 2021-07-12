@@ -33,7 +33,6 @@ class CommentRepository extends ServiceEntityRepository
             }
 
         if (true === $onlyParents) {
-            dump('test');
             $query->where('c.parent is null');
             }
 
@@ -48,14 +47,11 @@ class CommentRepository extends ServiceEntityRepository
         ;
 
         if (isset($parentId)) {
-            dump($parentId);
-            dump($query);
             $query->join('c.parent', 'p')
                 ->andWhere('p.id = :parentId')
                 ->setParameter('parentId', $parentId)
             ;
 
-            dump($query);
         }
 
         return $query;
