@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block body %}
+<div class="form-zone">
+    <h1 class="zone-title">Mot de passe oublié</h1>
+
+        {{ form_start(resetForm, {'attr' : {'class' : 'trick-editor-form'}}) }}
+         <div class="form-group">
+            {{ form_label(resetForm.plainPassword.first) }}
+            {{ form_widget(resetForm.plainPassword.first, { attr: {'class': 'form-control'}}) }}
+         </div>
+    <div class="form-group">
+            {{ form_label(resetForm.plainPassword.second) }}
+            {{ form_widget(resetForm.plainPassword.second, { attr: {'class': 'form-control'}}) }}
+    </div>
+            <button class="btn btn-primary">Réinitialiser le mot de passe</button>
+        {{ form_end(resetForm) }}
+</div>
+{% endblock %}

@@ -17,7 +17,6 @@ class IndexController extends AbstractController
     {
         $content['tricks'] = $trickRepository->findAll();
         return $this->render('index/index.html.twig', [
-            'controller_name' => 'IndexController',
             'content' => $content
         ]);
     }

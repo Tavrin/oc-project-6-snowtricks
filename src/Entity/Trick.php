@@ -40,7 +40,7 @@ class Trick
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
+     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks", fetch="EAGER")
      */
     private $trickGroup;
 
@@ -55,7 +55,7 @@ class Trick
     private $trickModifies;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", fetch="EAGER")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", cascade={"remove"})
      */
     private $comments;
 
@@ -64,11 +64,22 @@ class Trick
      */
     private $mainMedia;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true)
+     */
+    private $videos;
+
     public function __construct()
     {
         $this->trickMedia = new ArrayCollection();
         $this->trickModifies = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -204,6 +215,21 @@ class Trick
         return $this->comments;
     }
 
+    /**
+     * @return array|Comment[]
+     */
+    public function getCommentsWithoutParent(): array
+    {
+        $comments = [];
+        foreach ($this->comments as $comment) {
+            if (null === $comment->getParent()) {
+                $comments[] = $comment;
+            }
+        }
+        return $comments;
+    }
+
+
     public function addComment(Comment $comment): self
     {
         if (!$this->comments->contains($comment)) {
@@ -234,6 +260,48 @@ class Trick
     public function setMainMedia(?Media $mainMedia): self
     {
         $this->mainMedia = $mainMedia;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->removeElement($video)) {
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
+        }
 
         return $this;
     }

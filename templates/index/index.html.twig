@@ -3,7 +3,7 @@
 {% block title %}Snowtricks - page d'accueil{% endblock %}
 
 {% block body %}
-
+    {% include 'partials/inc/media_modal.html.twig' %}
     <div id="landing-zone">
         <div id="landing-zone-text">
             <h1>Snowtricks</h1>
@@ -17,9 +17,9 @@
             {% for trick in content.tricks %}
                 <div class="trick-item">
                     <div class="featured-item-image">
-                        {% include'/partials/inc/listing_media.html.twig' %}
+                        <a href="/tricks/{{ trick.slug }}">{% include'/partials/inc/listing_media.html.twig' %}</a>
                     </div>
-                    <span class="trick-item-info"><a href="/tricks/{{ trick.id }}">{{ trick.name }}</a> {% if app.user and app.user.isVerified == true %}<span><a href="/tricks/{{ trick.id }}/edit"><i class="fas fa-pen"></i></a> <i class="fas fa-trash"></i></span>{% endif %}</span>
+                    <span class="trick-item-info"><a href="/tricks/{{ trick.slug }}">{{ trick.name }}</a> {% if app.user and app.user.isVerified == true %}<span><a href="/tricks/{{ trick.slug }}/edit"><i class="fas fa-pen"></i></a> <a class="js-modal" data-type="confirm" data-target-id="mediaModal" href="/tricks/{{ trick.slug }}/delete"><i class="fas fa-trash"></i></a></span>{% endif %}</span>
                 </div>
             {% endfor %}
         </div>

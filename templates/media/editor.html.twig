@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Snowtricks - Nouvelle image{% endblock %}
+{% block header %}
+    {% include 'partials/inc/flash.html.twig' %}
+{% endblock %}
+{% block body %}
+    <div class="form-zone">
+        <h1 class="zone-title">{{ 'edit' == type ? "Editer l'image : " ~ form.name.vars.value : 'Créer une nouvelle image' }}</h1>
+        {{ form_start(form, {'attr' : {'class' : 'trick-editor-form'}}) }}
+        <div class="form-group">
+            {{ form_label(form.name, 'Nom de l\'image', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.name, { attr: {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.caption, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.caption, { attr: {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-submit">
+            <button type="submit" class="btn">{{ 'new' == type ? 'Créer' : 'Editer'}}</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
