@@ -20,8 +20,6 @@ export default class CommentResponse {
             if (false === this.state) {
                 utils.ajax('/api/comments/new', 'POST', JSON.stringify(this.params)).then(data => {
                     let test = document.createRange().createContextualFragment(data.data);
-                    console.log(data.data);
-                    console.log(this.target);
                     this.target.appendChild(test);
                     let form =  this.target.querySelector('form');
                     if (null !== form) {
@@ -39,25 +37,8 @@ export default class CommentResponse {
         let formData = new FormData(form);
         this.message = formData.get('comment_form[content]');
         utils.ajax('/api/comments/new', 'POST', formData).then(data => {
-            let flash;
             if(data['status'] === 201) {
-                utils.addFlash('Le commentaire a été ajouté avec succès');
-                let message =
-                    `
-                    <div id="" class="comment-item new">
-                        <div class="w-100 d-f mb-1-5">
-                            <div>
-                                <span class="fw-900 d-b mb-0-5"><a href="#">${data.user}</a></span>
-                            </div>
-                        </div>
-                        <p class="ta-l w-100">${this.message}</p>
-                        </div>
-                    </div>
-                    `
-                message = document.createRange().createContextualFragment(message);
-                let container = document.querySelector(`#answers-${this.params.pid}`);
-                container.insertBefore(message, container.firstChild);
-                this.target.remove();
+                location.reload();
             } else {
                 utils.addFlash('Le commentaire n\'a pas pu être ajouté', 'danger');
             }

@@ -11,6 +11,18 @@ p a,.comment-post a {
     margin-right: 1rem;
 }
 
+.bold {
+    font-weight: 700!important;
+}
+
+.mt-1 {
+    margin-top: 1rem;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
 .bb-dg {
     border-bottom: 1px solid #DFE1E7;
 }
@@ -77,7 +89,15 @@ footer {
     border-radius: 7px;
     position: relative;
     background-color: #f6f6f6;
-    box-shadow: 0 2px 9px -2px #b2b2b2;
+    box-shadow: 0 2px 40px 0 rgba(0, 0, 0,0.2);
+    transition: box-shadow  .2s ease-out;
+    transition-delay: .1s;
+}
+
+.trick-item:hover {
+
+    -webkit-box-shadow: 0px 10px 13px -7px #000000, 0px 5px 23px 6px rgba(0,0,0,0.2);
+    box-shadow: 0px 10px 13px -7px #000000, 0px 5px 23px 6px rgba(0,0,0,0.2);
 }
 
 .trick-item-shimmer {
@@ -249,6 +269,10 @@ footer {
     flex-direction: column;
 }
 
+.form-group__row {
+    flex-direction: row;
+}
+
 .form-group-row {
     justify-content: space-between;
     align-items: center;
@@ -259,6 +283,10 @@ footer {
 
 .form-label {
     padding-bottom: .5rem;
+}
+
+.form-label__checkbox {
+    padding-left: .5rem;
 }
 
 .trick-editor-form, .profile-editor-form {
@@ -295,12 +323,24 @@ footer {
     padding-right: 4rem;
 }
 
+.comment-post {
+    margin-top: 1rem;
+}
+
 .btn {
     background: #55556a;
     color: white;
     padding: 1rem 2rem;
     font-weight: 800;
     border-radius: 5px;
+}
+
+.btn-danger {
+    background-color: red;
+}
+
+.btn-danger:hover {
+    background-color: #930202;
 }
 
 .btn-new-trick {
@@ -365,10 +405,14 @@ footer {
 
 .trick-show-info {
     width: 70%;
+}
+
+.trick-show-info:first-letter {
     text-transform: capitalize;
 }
 
 .trick-show-metadata {
+    width: 70%;
     margin-top: 2rem;
 }
 
@@ -392,6 +436,7 @@ footer {
 }
 
 .comment-item {
+    box-sizing: border-box;
     margin-bottom: 1rem;
     margin-top: 1rem;
     padding-bottom: 1rem;
@@ -439,7 +484,7 @@ footer {
     margin-left: auto;
     background-color: #f8f8f8;
     border-bottom: none;
-    width: 97.5%;
+    width: 99.5%;
     float: left;
     padding: 1rem 0 1rem 1rem;
 }
@@ -493,10 +538,10 @@ footer {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 9999;
+    z-index: 9998;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    overflow: auto;
     outline: none;
 }
 
@@ -504,10 +549,29 @@ footer {
     overflow: auto;
     height: 40rem;
     width: 70%;
-    background: white;
+    background-color:rgba(255,255,255,0.9);
     margin: 1.75rem auto;
     transition: transform .3s ease-out;
     padding: 1rem;
+}
+
+.modal-confirm {
+    overflow: auto;
+    height: 12rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20rem;
+}
+
+.modal-confirm i {
+    align-self: flex-start;
+}
+
+.modal-confirm h4 {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
 .modal-image-info {
@@ -518,6 +582,15 @@ footer {
 .modal-media-gallery-container {
     display: flex;
     flex-direction: column;
+}
+
+.modal-video-gallery-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 
 .modal-media-gallery {
@@ -540,6 +613,18 @@ footer {
    width: 100%;
 }
 
+.modal-video-item {
+    display: flex;
+    flex-direction: column;
+    max-width: 35rem;
+    padding: 1rem;
+}
+
+.modal-video-button-delete {
+    align-self: center;
+    margin-top: 1rem;
+    width: 50%;
+}
 
 .fade {
     transition: opacity 15s linear;
@@ -607,6 +692,10 @@ footer {
     font-weight: 800;
 }
 
+#navDropDown {
+    display: none;
+}
+
 #tricks-zone {
     display: flex;
     flex-direction: column;
@@ -620,9 +709,7 @@ footer {
     display: flex;
     flex-direction: column;
     width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 4rem;
+    margin: 4rem auto;
 }
 
 #profile-zone {
@@ -630,6 +717,10 @@ footer {
     margin: 4rem auto;
     display: flex;
     flex-direction: row;
+}
+
+#email-verification-status {
+    margin-bottom: 2rem;
 }
 
 #settings-zone {
@@ -743,7 +834,7 @@ nav .settings-bar-left-item:hover {
     right: 0;
     left: 0;
     top: 3rem;
-    max-width: 30rem;
+    max-width: 60%;
     width: max-content;
     position: fixed;
     padding: 1rem 4rem 1rem 1rem;

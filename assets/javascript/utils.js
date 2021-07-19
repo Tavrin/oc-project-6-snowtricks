@@ -66,7 +66,7 @@ utils.store = {
 
 utils.addFlash = (message, type = 'success') => {
     let flash;
-    if (type && 'danger' === type) {
+    if (type && ('danger' === type || 'error' === type)) {
         flash = `
                     <div class="flash flash-danger ajax-flash" role="alert">
                         ${message}
@@ -84,7 +84,7 @@ utils.addFlash = (message, type = 'success') => {
         flash = document.createRange().createContextualFragment(flash);
     }
 
-    this.setFLashEvent(flash);
+    utils.setFLashEvent(flash);
     header.appendChild(flash);
 }
 

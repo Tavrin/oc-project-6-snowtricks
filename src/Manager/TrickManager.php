@@ -85,15 +85,15 @@ class TrickManager
         $video->setTrick($trick);
 
         if ('youtube' === $video->getVideoType()->getName()) {
-            preg_match('#(\?v=|/v/)([-a-zA-Z0-9]+)#', $video->getUrl(), $link);
-            $video->setUrl($link[2]);
+            parse_str( parse_url( $video->getUrl(), PHP_URL_QUERY ), $link );
+            $video->setUrl($link['v']);
         }
 
         $this->em->persist($video);
         $this->em->flush();
     }
 
-    public function getTricks(array $queries, TrickRepository $trickRepository, $limit = 5): Paginator
+    public function getTricks(array $queries, TrickRepository $trickRepository, $limit = 8): Paginator
     {
         $trickName = null;
         $groupId = null;

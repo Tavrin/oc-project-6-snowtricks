@@ -1,7 +1,6 @@
 import {utils} from "./utils";
 let searchTricksForm = document.querySelector('#search-tricks-form');
 
-console.log(searchTricksForm);
 if (searchTricksForm) {
     searchTricksForm.addEventListener('submit', (e) => {
         e.preventDefault()
@@ -16,7 +15,6 @@ if (searchTricksForm) {
             request += '&groupId=' + groupId;
         }
         utils.ajax(`/api/tricks/${request}`).then(data => {
-            console.log(data);
             if (500 === data.status) {
                 utils.addFlash('Une erreur est survenue', 'danger')
                 return;

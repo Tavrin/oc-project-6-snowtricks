@@ -1,11 +1,11 @@
 <header class="header">
-    <nav class="navbar-container navbar">
-        <ul class="navbar">
+    <nav class="navbar-container navbar" id="main-navbar">
+        <ul class="navbar" id="navbar-logo">
             <li>
                 <a href="/" id="logo">Snowtricks</a>
             </li>
         </ul>
-        <ul class="navbar">
+        <ul class="navbar" id="navLinks" data-toggle-class="active">
             <li class="nav-item">
                 <a href="/" class="top-link">Accueil</a>
             </li>
@@ -30,5 +30,8 @@
             </li>
             {% endif %}
         </ul>
+        <a id="navDropDown" class="js-toggle" data-target-id="navLinks" data-type="display" href="#">
+            <i class="fas fa-bars"></i>
+        </a>
     </nav>
 </header>

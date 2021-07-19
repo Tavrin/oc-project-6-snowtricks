@@ -9,16 +9,13 @@
         </div>
         <div class="settings-zone-right">
             <h1 style="align-self: flex-start">Paramètres</h1>
+            <div id="email-verification-status">
             {% if app.user.isVerified == false %}
-                <div>
                     Adresse email non vérifiée : <a class="btn" style="max-width:2rem" href="{{ url('app_send_verify') }}">Renvoyer un email de confirmation</a>
-                </div>
             {% else%}
-                <div>
                     Adresse email vérifiée
-                </div>
             {% endif %}
-
+            </div>
             {{ form_start(form, {'attr' : {'class' : 'trick-editor-form'}}) }}
             <div class="form-group">
                 {{ form_label(form.plainPassword.first) }}

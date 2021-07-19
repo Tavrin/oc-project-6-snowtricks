@@ -3,14 +3,21 @@
 {% block title %}Snowtricks - {{ content.trick.name }} : historique de modifications{% endblock %}
 {% block body %}
 <section id="history-zone">
-    <h1 id="trick-zone-title-div">Historique de modifications de la figure : {{ content.trick.name }}</h1>
+    {% if content.trick.id is defined and content.trick.slug is defined and content.trick.slug is not empty %}
+        <div class="mb-1">
+            <a class="btn" href="/tricks/{{ content.trick.slug }}">Revenir à la figure</a>
+        </div>
+    {% endif %}
+    <h1 id="trick-zone-title-div" class="history-title">Historique de modifications de la figure : {{ content.trick.name }}</h1>
     <ul>
         {% for trickModify in content.trickModifies %}
             {% if trickModify.type == 'edit' %}
                 <li class="history-item">Modification apportée par <a  class="comment-username" href="/users/{{ trickModify.user.slug }}">{{ trickModify.user.username }}</a> le {{ trickModify.createdAt|date("d/m/Y") }} - Champ(s) modifié(s) :
-                    {% for field in trickModify.modifiedFields %}
-                        {{ field }}{% if not loop.last %},{% endif %}
-                    {% endfor %}
+                    <strong class="bold">
+                        {% for field in trickModify.modifiedFields %}
+                            {{ field }}{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    </strong>
                 </li>
             {% elseif trickModify.type == 'new' %}
                 <li class="history-item">Création de la figure par <a  class="comment-username" href="/users/{{ trickModify.user.slug }}">{{ trickModify.user.username }}</a> le {{ trickModify.createdAt|date("d/m/Y") }}</li>

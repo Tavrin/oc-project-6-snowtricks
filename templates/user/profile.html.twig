@@ -13,6 +13,9 @@
             <div>
                 <img src="{{ media }}" class="avatar" alt="">
             </div>
+            {% if content.user.lastConnexion is defined and content.user.lastConnexion is not empty %}
+                <small>Dernière connexion le : {{ content.user.lastConnexion|date("d m Y") }}</small>
+            {% endif %}
             <h1>{{ content.user.username }}</h1>
             <p>{{ content.user.description }}</p>
         </div>

@@ -9,6 +9,10 @@
             {{ form_label(form.caption, 'Description', {'label_attr': {'class': 'form-label'}}) }}
             {{ form_widget(form.caption, { attr: {'class': 'form-control'}}) }}
         </div>
+     <div class="form-group">
+         {{ form_label(form.file, 'Fichier', {'label_attr': {'class': 'form-label'}}) }}
+         {{ form_widget(form.file) }}
+     </div>
         <div class="form-submit">
             <button type="submit" class="btn">{{ 'new' == type ? 'Créer' : 'Editer'}}</button>
         </div>

@@ -20,7 +20,7 @@ class TrickRepository extends ServiceEntityRepository
         parent::__construct($registry, Trick::class);
     }
 
-    public function findTricksListing(int $first = 0, int $limit = 5, string $trickName = null, $groupId = null): Paginator
+    public function findTricksListing(int $first = 0, int $limit = 8, string $trickName = null, $groupId = null): Paginator
     {
         $query = $this->createQueryBuilder('t')
             ->orderBy('t.createdAt', 'DESC')

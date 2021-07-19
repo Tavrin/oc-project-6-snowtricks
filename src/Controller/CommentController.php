@@ -28,6 +28,7 @@ class CommentController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $commentManager->saveComment($comment, $this->getUser(), $form);
+            $this->addFlash('success', 'Le commentaire a été ajouté avec succès');
             return new JsonResponse(['status' => 201, 'data' => 'success', 'user' => $this->getUser()->getUsername()], 201);
         }
 

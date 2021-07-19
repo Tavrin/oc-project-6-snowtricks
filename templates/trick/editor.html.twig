@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Snowtricks - Nouvelle figure{% endblock %}
 {% set media = '' %}
 {% block javascripts %}
@@ -22,6 +21,11 @@
 {% block body %}
     {% include 'partials/inc/media_modal.html.twig' %}
     <div class="form-zone">
+        {% if trick.id is defined and trick.slug is defined and trick.slug is not empty %}
+            <div class="mb-1">
+                <a class="btn" href="/tricks/{{ trick.slug }}">Voir la figure</a>
+            </div>
+        {% endif %}
         <h1 class="zone-title">{{ 'edit' == type ? "Editer la figure : " ~ editorForm.name.vars.value : 'Créer une nouvelle figure' }}</h1>
         {{ form_start(editorForm, {'attr' : {'class' : 'trick-editor-form'}}) }}
         <div class="form-group">

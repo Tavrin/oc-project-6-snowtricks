@@ -11,7 +11,7 @@
     </div>
         <div class="settings-zone-right">
             <h1 style="align-self: flex-start">Profil</h1>
-            <a class="btn" style="align-self: flex-end"  href="/users/{{ app.user.slug }}">Retour au profil</a>
+            <a class="btn profile-settings-button" style="align-self: flex-end"  href="/users/{{ app.user.slug }}">Retour au profil</a>
             {{ form_start(form, {'attr' : {'class' : 'profile-editor-form'}}) }}
             <div class="form-group-row">
                 <img id="profile-settings-image" src="{{ media }}" class="avatar" alt="">

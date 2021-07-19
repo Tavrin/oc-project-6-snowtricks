@@ -12,7 +12,7 @@
 {% endblock %}
 {% set commentWidget = form_widget(commentForm.content, { attr: {'class': 'form-control'}}) %}
 {% block body %}
-    {% include 'partials/inc/media_modal.html.twig' %}
+    {% include 'partials/inc/confirm_modal.html.twig' %}
     {% macro showChild(comment, level) %}
     {% import _self as macros %}
 <div id="comment-item-{{ comment.id }}" class="comment-item {% if level is even %}answers-even{% endif %}">
@@ -52,48 +52,48 @@
                 <a class="trick-show-history btn" href="/tricks/{{ content.trick.slug }}/history">Historique</a>
                 {% if app.user is defined and app.user is not empty %}
                     <a class="btn" href="/tricks/{{ content.trick.slug }}/edit"><i class="fas fa-pen"></i></a>
-                    <a class="js-modal btn" data-type="confirm" data-target-id="mediaModal" href="/tricks/{{ content.trick.slug }}/delete"><i class="fas fa-trash"></i></a>
+                    <a class="js-modal btn" data-type="confirm" data-target-id="confirmModal" href="/tricks/{{ content.trick.slug }}/delete"><i class="fas fa-trash"></i></a>
                 {% endif %}
             </div>
 
             <div class="trick-show-header" {% if content.trick.mainMedia is defined and content.trick.mainMedia is not empty %} style="background-image: url('/uploads/tricks-images/{{ content.trick.mainMedia.file }}')!important; background-size: cover; background-repeat: no-repeat"{% endif %}>
             </div>
+            <h2 class="trick-show-section-title">Description</h2>
+            <div class="trick-show-info">
+                <p>{{ content.trick.description }}</p>
+            </div>
             <div id="trick-show-media">
                 <h2 class="trick-show-section-title">Médias</h2>
                 <i class="trick-show-media-collapse fas fa-chevron-up js-toggle" data-type="display" data-target-Id="trick-show-media-body" data-options='{"icons":["fa-chevron-up", "fa-chevron-down"]}'></i></span>
                 <div id="trick-show-media-body">
-                <h3>Images</h3>
-                {% if content.trick.trickMedias is defined and content.trick.trickMedias is not empty %}
-                    <div id="trick-show-images">
-                    {% for trickMedia in content.trick.trickMedias %}
-                        <img class="trick-show-image" src="/uploads/tricks-images/{{ trickMedia.media.file }}" alt="">
-                    {% endfor %}
-                    </div>
-                {% else %}
-                    <p>La figure ne contient pas d'images</p>
-                {% endif %}
-                <h3>Vidéos</h3>
-                {% if content.trick.videos is defined and content.trick.videos is not empty %}
-                    {% for video in content.trick.videos %}
-                        <iframe width="448" height="252" src="https://www.youtube.com/embed/{{ video.url }}"
-                                title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write;
+                    <h3>Images</h3>
+                    {% if content.trick.trickMedias is defined and content.trick.trickMedias is not empty %}
+                        <div id="trick-show-images">
+                            {% for trickMedia in content.trick.trickMedias %}
+                                <img class="trick-show-image" src="/uploads/tricks-images/{{ trickMedia.media.file }}" alt="">
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>La figure ne contient pas d'images</p>
+                    {% endif %}
+                    <h3>Vidéos</h3>
+                    {% if content.trick.videos is defined and content.trick.videos is not empty %}
+                        {% for video in content.trick.videos %}
+                            <iframe class="trick-show-video-item" width="270rem" height="150rem" src="https://www.youtube.com/embed/{{ video.url }}"
+                                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write;
                         encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    {% endfor %}
-                {% else %}
-                    <p>La figure ne contient pas de vidéos</p>
-                {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <p>La figure ne contient pas de vidéos</p>
+                    {% endif %}
                 </div>
             </div>
-                <h2 class="trick-show-section-title">Description</h2>
-            <div class="trick-show-info">
-                <p>{{ content.trick.description }}</p>
-                <div class="trick-show-metadata">
-                    <span class="trick-show-metadata-item m-r-1">Création : {{ content.trick.createdAt|date("d M Y") }}</span>
-                    {% if content.trick.updatedAt is defined and content.trick.updatedAt is not empty %}
-                        <span class="trick-show-metadata-item m-r-1">Modification : {{ content.trick.updatedAt|date("d/m/Y") }}</span>
-                    {% endif %}
-                    <span class="trick-show-metadata-item">Groupe : {{ content.trick.trickGroup.name }}</span>
-                </div>
+            <div class="trick-show-metadata">
+                <span class="trick-show-metadata-item">Création : {{ content.trick.createdAt|date("d M Y") }}</span>
+                {% if content.trick.updatedAt is defined and content.trick.updatedAt is not empty %}
+                    <span class="trick-show-metadata-item">Modification : {{ content.trick.updatedAt|date("d/m/Y") }}</span>
+                {% endif %}
+                <span class="trick-show-metadata-item">Groupe : {{ content.trick.trickGroup.name }}</span>
             </div>
         </div>
         <div id="trick-show-comments" class="bt-dg">

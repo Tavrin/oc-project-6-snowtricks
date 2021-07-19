@@ -45,12 +45,11 @@ if (tricksLoad) {
             if (document.querySelectorAll('.trick-item').length >= 15) {
                 document.querySelector('.landing-zone-arrow-up').classList.remove('d-n');
             }
-            console.log(data.response);
         });
     })
 }
 
-const setShimmers = (container, count = 5) => {
+const setShimmers = (container, count = 8) => {
     for (let i = 0; i < count; i++ ) {
         let trickItem = `
                     <div class="trick-item-shimmer">

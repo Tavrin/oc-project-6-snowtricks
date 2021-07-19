@@ -23,10 +23,9 @@
             {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
             {{ form_widget(registrationForm.plainPassword, { attr: {'class': 'form-control'}}) }}
         </div>
-        <div class="form-group">
-            {{ form_row(registrationForm.agreeTerms, {
-                        label: 'Je consent à partager mes informations avec SnowTricks'
-                    }) }}
+        <div class="form-group form-group__row">
+            {{ form_widget(registrationForm.agreeTerms) }}
+            {{ form_label(registrationForm.agreeTerms, 'Je consent à partager mes informations avec SnowTricks', {'label_attr': {'class': 'form-label__checkbox'}}) }}
         </div>
         <div class="form-submit">
             <button type="submit" class="btn">S'inscrire</button>

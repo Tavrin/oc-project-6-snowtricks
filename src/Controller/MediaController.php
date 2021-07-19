@@ -89,6 +89,16 @@ class MediaController extends AbstractController
         return new JsonResponse(['status' => 200,'response' => $this->render('video/new.html.twig', ['form' => $form->createView(), 'video' => $video])->getContent()]);
     }
 
+    /**
+     * @Route("/api/videos/{id}", name="video_delete", methods={"DELETE"})
+     */
+    public function deleteVideoAction(Video $video): JsonResponse
+    {
+        $this->getDoctrine()->getManager()->remove($video);
+        $this->getDoctrine()->getManager()->flush();
+        return new JsonResponse(['status' => 200, 'response' => 'image deleted'], 201);
+    }
+
 
     /**
      * @Route("/api/tricks/{slug}/videos", name="videos_index")
@@ -151,5 +161,15 @@ class MediaController extends AbstractController
         }
 
         return new JsonResponse(['status' => 500, 'response' => "L'image a déjà été ajoutée à la figure"], 500);
+    }
+
+    /**
+     * @Route("/api/media/images/{id}", name="delete_image", methods={"DELETE"})
+     */
+    public function deleteAction(Media $image): JsonResponse
+    {
+        $this->getDoctrine()->getManager()->remove($image);
+        $this->getDoctrine()->getManager()->flush();
+        return new JsonResponse(['status' => 200, 'response' => 'image deleted'], 201);
     }
 }

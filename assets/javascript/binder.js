@@ -37,7 +37,6 @@ class Binder {
 
     setImageEvent(elem) {
         elem.addEventListener('change', (e) => {
-            console.log(this.target);
             if (elem.dataset.from === 'file') {
                 let file    = elem.files[0];
                 let reader  = new FileReader();
