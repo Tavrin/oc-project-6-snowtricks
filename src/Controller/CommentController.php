@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CommentController extends AbstractController
 {
     /**
-     * @Route("/api/comments/new", name="api_new_comment")
+     * @Route("/api/comments/new", name="api_new_comment", methods={"POST", "GET"})
      */
     public function index(Request $request, CommentManager $commentManager): Response
     {
@@ -36,7 +36,7 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("/api/comments", name="comments_api_get")
+     * @Route("/api/comments", name="comments_api_get", methods={"GET"})
      */
     public function apiGetComments(Request $request, CommentRepository $commentRepository, CommentManager $commentManager): JsonResponse
     {

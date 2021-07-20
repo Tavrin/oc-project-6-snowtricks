@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MediaController extends AbstractController
 {
     /**
-     * @Route("/api/media/images", name="api_media")
+     * @Route("/api/media/images", name="api_media", methods={"GET"})
      */
     public function apiIndex(Request $request,MediaRepository $mediaRepository, MediaHelpers $helper): JsonResponse
     {
@@ -87,7 +87,7 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/api/videos/{id}", name="video_delete", methods={"DELETE"})
+     * @Route("/api/videos/{id}", name="video_delete", methods={"DELETE"}, requirements={"id"="\d+"})
      */
     public function deleteVideoAction(Video $video): JsonResponse
     {
@@ -98,7 +98,7 @@ class MediaController extends AbstractController
 
 
     /**
-     * @Route("/api/tricks/{slug}/videos", name="videos_index")
+     * @Route("/api/tricks/{slug}/videos", name="videos_index", methods={"GET"})
      */
     public function apiVideoIndex(Trick $trick, MediaHelpers $helper): JsonResponse
     {
@@ -147,7 +147,7 @@ class MediaController extends AbstractController
     }
 
     /**
-     * @Route("/api/media/images/{id}", name="delete_image", methods={"DELETE"})
+     * @Route("/api/media/images/{id}", name="delete_image", methods={"DELETE"}, requirements={"id"="\d+"})
      */
     public function deleteAction(Media $image): JsonResponse
     {

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/", name="index", methods={"GET"})
      */
     public function index(Request $request, TrickRepository $trickRepository): Response
     {
@@ -29,7 +29,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/mentions-legales", name="mentions_legales")
+     * @Route("/mentions-legales", name="mentions_legales", methods={"GET"})
      */
     public function legalMentionsAction(): Response
     {
