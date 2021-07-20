@@ -161,11 +161,22 @@ class Modal {
                 document.querySelector('#ajaxStatus').style.display = 'none';
             }
             data.response.forEach(e => {
-                let containerItem = document.createElement('div');
-                containerItem.classList.add('modal-video-item')
-                if ('youtube' === e.type) {
-                    containerItem.innerHTML =
-                        `
+                let containerItem = this.createVideoItem(e)
+
+                videosContainer.appendChild(containerItem);
+            })
+            videosContainer.querySelectorAll('.modal-video-button-delete').forEach((e) => {
+                e.addEventListener('click', () => {this.deleteVideo(e)})
+            });
+        })
+    }
+
+    createVideoItem(e) {
+        let containerItem = document.createElement('div');
+        containerItem.classList.add('modal-video-item')
+        if ('youtube' === e.type) {
+            containerItem.innerHTML =
+                `
                     <iframe width="100%" height="200rem" src="https://www.youtube.com/embed/${e.url}"
                     title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write;
                     encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -173,14 +184,10 @@ class Modal {
                          <button class="btn-modal modal-video-button-delete" data-id="${e['id']}" >Supprimer</button>
                     </div>
                     `
-                    ;
-                }
-                videosContainer.appendChild(containerItem);
-            })
-            videosContainer.querySelectorAll('.modal-video-button-delete').forEach((e) => {
-                e.addEventListener('click', () => {this.deleteVideo(e)})
-            });
-        })
+            ;
+        }
+
+        return containerItem;
     }
 
     addImageToContainer(item, container, type = 'add') {
@@ -292,13 +299,7 @@ class Modal {
         if (false === this.loaded.form) {
             utils.ajax(link).then(data => {
                 if (200 === data.status) {
-                    let form = document.createRange().createContextualFragment(data.response);
-                    this.formView.appendChild(form);
-                    this.loaded.form = true;
-                    if (this.target.querySelector('#ajaxStatusNew')) {
-                        document.querySelector('#ajaxStatusNew').style.display = 'none';
-                    }
-                    this.formView.querySelector('form').addEventListener('submit', (e) => this.createNewMedia(e))
+                    this.setForm(data);
                 }
             })
         }
@@ -306,6 +307,16 @@ class Modal {
         this.formView.classList.toggle('d-n');
 
         this.open.form = !this.open.form ;
+    }
+
+    setForm(data) {
+        let form = document.createRange().createContextualFragment(data.response);
+        this.formView.appendChild(form);
+        this.loaded.form = true;
+        if (this.target.querySelector('#ajaxStatusNew')) {
+            document.querySelector('#ajaxStatusNew').style.display = 'none';
+        }
+        this.formView.querySelector('form').addEventListener('submit', (e) => this.createNewMedia(e))
     }
 
     createNewMedia(e) {
