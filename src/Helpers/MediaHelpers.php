@@ -4,9 +4,12 @@
 namespace App\Helpers;
 
 use App\Entity\Trick;
+use App\Entity\TrickMedia;
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
-use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class MediaHelpers
 {
@@ -68,5 +71,30 @@ class MediaHelpers
         }
 
         return $hydratedArray;
+    }
+
+    public function manageTrickMedia(Request $request, $content, $media, $trick): ?JsonResponse
+    {
+        $result = null;
+        if ($request->isMethod('POST')) {
+            if (false === $trick->hasMedia((int)$content['id'])) {
+                $trickMedia = new TrickMedia();
+                $trickMedia->setCreatedat(new DateTime);
+                $trickMedia->setTrick($trick);
+                $trickMedia->setMedia($media);
+
+                $this->doctrine->getManager()->persist($trickMedia);
+                $this->doctrine->getManager()->flush();
+
+                $result = new JsonResponse(['status' => 201, 'response' => 'image added to trick'], 201);
+            }
+        } elseif ($request->isMethod('DELETE')) {
+            $trick->removeTrickMediaFromMediaId((int)$content['id']);
+            $this->doctrine->getManager()->persist($trick);
+            $this->doctrine->getManager()->flush();
+            $result = new JsonResponse(['status' => 200, 'response' => 'image removed from trick'], 201);
+        }
+
+        return $result;
     }
 }

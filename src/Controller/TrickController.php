@@ -53,7 +53,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/tricks/new", priority="10", name="trick_new")
      */
-    public function newAction(Request $request, MediaRepository $mediaRepository, SluggerInterface $slugger, TrickManager $trickManager): Response
+    public function newAction(Request $request, SluggerInterface $slugger, TrickManager $trickManager): Response
     {
         if (false === $this->getUser()->isVerified()) {
             $this->addFlash(
@@ -68,16 +68,10 @@ class TrickController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $media = $form->get('mainMedia')->getData();
-            if (!empty($media = $mediaRepository->findOneBy(['file' => $media]))) {
-                $trick->setMainMedia($media);
-            }
 
-            $trick->setCreatedat(new DateTime);
-            $trick->setSlug($slugger->slug($trick->getName()));
-            $this->getDoctrine()->getManager()->persist($trick);
-            $this->getDoctrine()->getManager()->flush();
+            $trickManager->saveTrick($trick, true);
             $trickManager->createTrickAudit($trick, $this->getUser(), true);
+
             $this->addFlash('success', 'Figure créée avec succès');
             return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
         }
@@ -107,6 +101,7 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickFormType::class, $trick);
         $oldTrick = clone $this->getDoctrine()->getRepository(Trick::class)->findOneBy(['id' => $trick->getId()]);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $trick = $trickManager->setTrickMainMedia($trick, $form);
             $trickManager->createTrickAudit($trick, $this->getUser(), false, $oldTrick);
@@ -114,6 +109,7 @@ class TrickController extends AbstractController
             $this->addFlash('success', 'Figure modifiée avec succès');
             return $this->redirectToRoute('trick_show', ['slug' => $trick->getSlug()]);
         }
+
         return $this->render('trick/editor.html.twig', [
             'editorForm' => $form->createView(),
             'trick' => $trick,

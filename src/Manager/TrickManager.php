@@ -30,20 +30,29 @@ class TrickManager
         $this->slugger = $slugger;
     }
 
-    public function setTrickMainMedia(Trick $trick, FormInterface $form)
+    public function setTrickMainMedia(Trick $trick, FormInterface $form): Trick
     {
         $media = str_replace('/uploads/tricks-images/', '', $form->get('mainMedia')->getData());
         if (!empty($media = $this->em->getRepository(Media::class)->findOneBy(['file' => $media]))) {
             $trick->setMainMedia($media);
+        } elseif ('none' === $media || null === $media) {
+            $trick->setMainMedia(null);
         }
 
         return $trick;
     }
 
-    public function saveTrick(Trick $trick): bool
+    public function saveTrick(Trick $trick, bool $new = false): bool
     {
-        $trick->setUpdatedAt(new DateTime);
+        if (false === $new) {
+            $trick->setUpdatedAt(new DateTime);
+        }
+
         $trick->setSlug($this->slugger->slug($trick->getName()));
+
+        if (true === $new) {
+            $this->em->persist($trick);
+        }
         $this->em->flush();
 
         return true;

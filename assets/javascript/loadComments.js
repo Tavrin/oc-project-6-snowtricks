@@ -27,7 +27,6 @@ let getComments = (container, count, trickId, target, commentId = null, level = 
     }
 
     utils.ajax(request).then(data => {
-
         if (shimmers) {
             Array.prototype.forEach.call( shimmers, function( node ) {
                 node.parentNode.removeChild( node );
@@ -45,36 +44,20 @@ let getComments = (container, count, trickId, target, commentId = null, level = 
             getComments(commentContainer, count, trickId, target, comment.id, level)
             });
 
-        target.dataset.currentCount = (document.querySelectorAll('.comment-item').length - 1).toString();
-
-        if (data.response['totalCount'] <= document.querySelectorAll('.comment-item').length) {
-            target.style.display = 'none';
-        }
+        setCountData(data, target);
     })
 }
 
-let setCommentItem = (comment, container, level) => {
-    let commentItem = `
-                    <div class="comment-item ${level % 2 === 0 ? 'answers-even': ''}">
-                        <div class="comment-item-body">
-                            <div class="w-100 d-f mb-1-5">
-                                <div>
-                                    <span class="fw-900 d-b mb-0-5"><a class="comment-username" href="${comment.user? '/users/'+comment.user : '#'}">${comment.user ?? 'utilisateur supprimé'}</a></span>
-                                </div>
-                            </div>
-                            <p class="ta-l w-100">${ comment.status === true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>' }</p>
-                            <div class="comment-item-metadata">
-                                <span class="comment-item-metadata-date-info">Posté le <span class="comment-item-metadata-date">${comment.createdAt}</span></span>
-                                <span style="text-align: right" class="js-toggle comment-response" data-pid="${comment.id}" data-target-id="response-${comment.id}" data-type="display">Répondre</span>
-                            </div>
-                            <div class="d-n" id="response-${comment.id}">
-                            </div>
-                        </div>
-                        <div id="answers-${comment.id}">
-                        </div>
-                    </div>
-                `
+let setCountData = (data, target) => {
+    target.dataset.currentCount = (document.querySelectorAll('.comment-item').length - 1).toString();
 
+    if (data.response['totalCount'] <= document.querySelectorAll('.comment-item').length) {
+        target.style.display = 'none';
+    }
+}
+
+let setCommentItem = (comment, container, level) => {
+    let commentItem = setCommentItemTemplate(level, comment);
     commentItem = document.createRange().createContextualFragment(commentItem);
     let body = commentItem.querySelector('.comment-item-body');
 
@@ -93,6 +76,29 @@ let setCommentItem = (comment, container, level) => {
 
     return container.querySelector('#answers-'+comment.id);
 };
+
+let setCommentItemTemplate = (level, comment) => {
+    return `
+                    <div class="comment-item ${level % 2 !== 0 ? 'answers-even' : ''}">
+                        <div class="comment-item-body">
+                            <div class="w-100 d-f mb-1-5">
+                                <div>
+                                    <span class="fw-900 d-b mb-0-5"><a class="comment-username" href="${comment.user ? '/users/' + comment.user : '#'}">${comment.user ?? 'utilisateur supprimé'}</a></span>
+                                </div>
+                            </div>
+                            <p class="ta-l w-100">${comment.status === true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>'}</p>
+                            <div class="comment-item-metadata">
+                                <span class="comment-item-metadata-date-info">Posté le <span class="comment-item-metadata-date">${comment.createdAt}</span></span>
+                                <span style="text-align: right" class="js-toggle comment-response" data-pid="${comment.id}" data-target-id="response-${comment.id}" data-type="display">Répondre</span>
+                            </div>
+                            <div class="d-n" id="response-${comment.id}">
+                            </div>
+                        </div>
+                        <div id="answers-${comment.id}">
+                        </div>
+                    </div>
+                `;
+}
 
 const setShimmers = (container, count = 5) => {
     for (let i = 0; i < count; i++ ) {

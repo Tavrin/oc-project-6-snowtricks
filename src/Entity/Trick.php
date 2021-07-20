@@ -79,6 +79,7 @@ class Trick
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->trickMedia = new ArrayCollection();
         $this->trickModifies = new ArrayCollection();
         $this->comments = new ArrayCollection();

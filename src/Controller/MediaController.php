@@ -14,12 +14,9 @@ use App\Repository\MediaRepository;
 use App\Service\FileUploader;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class MediaController extends AbstractController
 {
@@ -127,7 +124,7 @@ class MediaController extends AbstractController
     /**
      * @Route("/api/tricks/{slug}/images", name="trick_new_image", methods={"POST", "DELETE"})
      */
-    public function apiTrickNewImage(Request $request, Trick $trick): JsonResponse
+    public function apiTrickNewImage(Request $request, Trick $trick, MediaHelpers $mediaHelper): JsonResponse
     {
         if (!empty($request->getContent())) {
             $content = $request->toArray();
@@ -140,24 +137,10 @@ class MediaController extends AbstractController
             return new JsonResponse(['status' => 404, 'response' => 'the image doesn\'t exist'], 404);
         }
 
-        if ($request->isMethod('POST')) {
-            if (false === $trick->hasMedia((int)$content['id'])) {
-                $trickMedia = new TrickMedia();
-                $trickMedia->setCreatedat(new DateTime);
-                $trickMedia->setTrick($trick);
-                $trickMedia->setMedia($media);
+        $result = $mediaHelper->manageTrickMedia($request,$content, $media, $trick);
 
-                $this->getDoctrine()->getManager()->persist($trickMedia);
-                $this->getDoctrine()->getManager()->flush();
-
-                return new JsonResponse(['status' => 201, 'response' => 'image added to trick'], 201);
-            }
-        } elseif ($request->isMethod('DELETE')) {
-            $trick->removeTrickMediaFromMediaId((int)$content['id']);
-            $this->getDoctrine()->getManager()->persist($trick);
-            $this->getDoctrine()->getManager()->flush();
-            return new JsonResponse(['status' => 200, 'response' => 'image removed from trick'], 201);
-
+        if (null !== $result) {
+            return $result;
         }
 
         return new JsonResponse(['status' => 500, 'response' => "L'image a déjà été ajoutée à la figure"], 500);

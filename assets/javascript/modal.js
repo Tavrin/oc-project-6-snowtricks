@@ -282,12 +282,7 @@ class Modal {
         let link = '';
         const slug = this.getTrickSlug();
         'image' === this.type ? link = '/api/media/images/new' : link = `/api/tricks/${slug}/videos/new`;
-        if (!this.open.form) {
-            e.currentTarget.textContent = 'Retour';
-        } else if (e) {
-            e.currentTarget.textContent = `Ajouter une ${this.type}`;
-        }
-
+        this.setFormReturn(e);
         if (true === this.open.form) {
             this.resetModal();
             this.setModalData();
@@ -307,6 +302,14 @@ class Modal {
         this.formView.classList.toggle('d-n');
 
         this.open.form = !this.open.form ;
+    }
+
+    setFormReturn(e) {
+        if (!this.open.form) {
+            e.currentTarget.textContent = 'Retour';
+        } else if (e) {
+            e.currentTarget.textContent = `Ajouter une ${this.type}`;
+        }
     }
 
     setForm(data) {
