@@ -53,7 +53,7 @@ class TrickManager
     {
         $trickModify = new TrickModify();
         $trickModify->setTrick($trick);
-        $trickModify->setUser($user);
+        $trickModify->setUser($user->getSlug());
         if (true === $isNewTrick) {
             $trickModify->setType('new');
         } else {

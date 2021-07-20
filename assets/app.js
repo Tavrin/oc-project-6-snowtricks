@@ -13,8 +13,8 @@ import './styles/responsive.css';
 //js
 import './javascript/utils';
 import './javascript/header';
-import './javascript/binder';
 import './javascript/filler';
+import './javascript/binder';
 import './javascript/modal';
 import './javascript/toggle-content';
 import './javascript/CommentResponse';

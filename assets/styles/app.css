@@ -4,7 +4,7 @@ p a,.comment-post a {
 }
 
 .d-n {
-    display: none;
+    display: none!important;
 }
 
 .m-r-1 {
@@ -166,7 +166,7 @@ footer {
 }
 
 .trick-show-image {
-    width: 10rem;
+    width: 15rem;
 }
 
 .trick-search-form {
@@ -209,12 +209,16 @@ footer {
 }
 
 #trick-show-images {
-    justify-content: space-evenly;
+    justify-content: flex-start;
     flex-wrap: wrap;
     padding-top: 1rem;
     margin-bottom: 2rem;
     display: flex;
-    height: 10rem;
+    height: max-content;
+}
+
+#trick-show-images img {
+    padding-right: 1rem;
 }
 
 #legal-mentions {
@@ -396,6 +400,7 @@ footer {
 .trick-show-header {
     text-align: center;
     background-image: url("../images/trick-default.jpg");
+    background-position: center center;
     background-size: cover;
     height: 50vh;
     padding-top: 15%;
@@ -405,6 +410,10 @@ footer {
 
 .trick-show-info {
     width: 70%;
+}
+
+.trick-show-info p {
+    white-space: pre-wrap;
 }
 
 .trick-show-info:first-letter {
@@ -523,6 +532,25 @@ footer {
     border-left: 1px solid rgb(217, 217, 217);
     padding-right: .5rem;
     padding-left: .5rem;
+}
+
+#danger-zone {
+    position: relative;
+    padding: 4rem;
+    border: 1px solid red;
+    border-radius: 10px;
+    margin-top: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+#danger-zone span {
+    color: red;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
 }
 
 .comment-item .new {
@@ -723,6 +751,10 @@ footer {
     margin-bottom: 2rem;
 }
 
+#email-verification-status .btn {
+    margin: .9rem;
+}
+
 #settings-zone {
     width: 100%;
     margin: 0 auto;
@@ -872,6 +904,14 @@ nav .settings-bar-left-item:hover {
     border-color: #ffecb5;
 }
 
+#previewImage {
+    max-width: 100%;
+}
+
+#mediaShow {
+    max-width: 20rem;
+}
+
 .flash-other {
     color: #084298;
     background-color: #cfe2ff;
@@ -909,14 +949,6 @@ nav .settings-bar-left-item:hover {
     display: block!important;
 }
 
-@media screen and (max-width: 1024px) {
-    .trick-item {
-        margin-left: auto;
-        margin-right: auto;
-        width: 95%;
-        height: max-content;
-    }
-}
 .landing-container {
     position: relative;
     height: 60vh;

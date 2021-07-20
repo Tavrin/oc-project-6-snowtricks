@@ -12,7 +12,7 @@
     <ul>
         {% for trickModify in content.trickModifies %}
             {% if trickModify.type == 'edit' %}
-                <li class="history-item">Modification apportée par <a  class="comment-username" href="/users/{{ trickModify.user.slug }}">{{ trickModify.user.username }}</a> le {{ trickModify.createdAt|date("d/m/Y") }} - Champ(s) modifié(s) :
+                <li class="history-item">Modification apportée par <a  class="comment-username" href="/users/{{ trickModify.user }}">{{ trickModify.user }}</a> le {{ trickModify.createdAt|date("d/m/Y") }} - Champ(s) modifié(s) :
                     <strong class="bold">
                         {% for field in trickModify.modifiedFields %}
                             {{ field }}{% if not loop.last %},{% endif %}
@@ -20,7 +20,7 @@
                     </strong>
                 </li>
             {% elseif trickModify.type == 'new' %}
-                <li class="history-item">Création de la figure par <a  class="comment-username" href="/users/{{ trickModify.user.slug }}">{{ trickModify.user.username }}</a> le {{ trickModify.createdAt|date("d/m/Y") }}</li>
+                <li class="history-item">Création de la figure par <a  class="comment-username" href="/users/{{ trickModify.user }}">{{ trickModify.user }}</a> le {{ trickModify.createdAt|date("d/m/Y") }}</li>
             {% endif %}
         {% endfor %}
     </ul>

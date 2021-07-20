@@ -19,7 +19,7 @@
     {% if level > 0 %}<div class="comment-item-body">{% endif %}
         <div class="w-100 d-f mb-1-5">
             <div>
-                <span class="fw-900 d-b mb-0-5"><img class="avatar" src="{{ comment.user.picture ? '/uploads/tricks-images/' ~ comment.user.picture : asset('build/images/user-placeholder.png') }}" alt=""><a class="comment-username" href="{{ comment.user.slug? '/users/' ~ comment.user.slug : '#' }}">{{ comment.user.username?? 'utilisateur supprimé' }}</a></span>
+                <span class="fw-900 d-b mb-0-5"><img class="avatar" src="{{ comment.user and comment.user.picture ? '/uploads/users-images/' ~ comment.user.picture : asset('build/images/user-placeholder.png') }}" alt=""><a class="comment-username" href="{{ comment.user and comment.user.slug? '/users/' ~ comment.user.slug : '#' }}">{{ comment.user.username?? 'utilisateur supprimé' }}</a></span>
             </div>
         </div>
         <p class="ta-l w-100">{{ comment.status == true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>' }}</p>

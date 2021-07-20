@@ -2,7 +2,7 @@
 
 {% block title %}Snowtricks - Paramètres utilisateur{% endblock %}
 
-{% set media = app.user.picture ? '/uploads/tricks-images/' ~ app.user.picture : asset('build/images/user-placeholder.png') %}
+{% set media = app.user.picture ? '/uploads/users-images/' ~ app.user.picture : asset('build/images/user-placeholder.png') %}
 
 {% block body %}
 <div id="settings-zone">

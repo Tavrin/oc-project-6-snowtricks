@@ -3,6 +3,7 @@
 {% block title %}Snowtricks - Paramètres utilisateur{% endblock %}
 
 {% block body %}
+    {% include 'partials/inc/confirm_modal.html.twig' %}
     <div id="settings-zone">
         <div class="settings-zone-left">
             {% include'/partials/inc/settings_left.html.twig' %}
@@ -11,7 +12,7 @@
             <h1 style="align-self: flex-start">Paramètres</h1>
             <div id="email-verification-status">
             {% if app.user.isVerified == false %}
-                    Adresse email non vérifiée : <a class="btn" style="max-width:2rem" href="{{ url('app_send_verify') }}">Renvoyer un email de confirmation</a>
+                    Adresse email non vérifiée : <a class="btn" href="{{ url('app_send_verify') }}">Renvoyer un email de confirmation</a>
             {% else%}
                     Adresse email vérifiée
             {% endif %}
@@ -27,6 +28,11 @@
             </div>
             <button class="btn btn-primary">Changer le mot de passe</button>
             {{ form_end(form) }}
+
+            <div id="danger-zone">
+                <span>Zone de Danger</span>
+            <a class="js-modal btn btn-danger delete-account-button" data-type="confirm" data-target-id="confirmModal" href="{{ url('delete_user', {'slug': app.user.slug}) }}">Supprimer le compte</a>
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -2,7 +2,7 @@
 
 {% block title %}Snowtricks - {{ content.user.username }}{% endblock %}
 
-{% set media = content.user.picture ? '/uploads/tricks-images/' ~ content.user.picture : asset('build/images/user-placeholder.png') %}
+{% set media = content.user.picture ? '/uploads/users-images/' ~ content.user.picture : asset('build/images/user-placeholder.png') %}
 
 {% block body %}
     <div id="profile-zone">
@@ -31,7 +31,7 @@
                 <p class="ta-l w-100">{{ comment.status == true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>' }}</p>
                 <div class="comment-item-metadata">
                     <span class="comment-item-metadata-date-info">Posté le <span class="comment-item-metadata-date">{{ comment.createdAt|date("d/m/Y")}}</span></span>
-                    <a style="text-align: right" class="js-toggle comment-response" href="/tricks/{{ comment.trick.slug }}#comment-item-{{ comment.id }}">Contexte</a>
+                    <a style="text-align: right" class="" href="/tricks/{{ comment.trick.slug }}#comment-item-{{ comment.id }}">Contexte</a>
                 </div>
             </div>
             {% endfor %}

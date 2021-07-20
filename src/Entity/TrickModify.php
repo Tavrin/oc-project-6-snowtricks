@@ -29,7 +29,7 @@ class TrickModify
     private $trick;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trickModifies")
+     * @ORM\Column(type="string", length=255)
      */
     private $user;
 
@@ -77,12 +77,12 @@ class TrickModify
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?string
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?string $user): self
     {
         $this->user = $user;
 
