@@ -33,7 +33,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="app_register")
+     * @Route("/register", name="app_register", methods={"POST", "GET"})
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator, SluggerInterface $slugger): Response
     {
@@ -42,7 +42,6 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
@@ -56,10 +55,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
             $this->userManager->sendVerificationEmail($this->emailVerifier, $user);
-            // do anything else you need here, like send an email
-
             $this->addFlash(
                 'success',
                 'Bienvenue, vous pouvez maintenant commenter les figures mais vous devez encore confirmer votre email avant de pouvoir en créer, modifier ou supprimer'
@@ -69,7 +65,7 @@ class RegistrationController extends AbstractController
                 $user,
                 $request,
                 $authenticator,
-                'main' // firewall name in security.yaml
+                'main'
             );
         }
 
@@ -79,7 +75,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/verify/send", name="app_send_verify")
+     * @Route("/verify/send", name="app_send_verify", methods={"POST", "GET"})
      */
     public function sendVerificationEmail(): Response
     {
@@ -96,7 +92,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/verify/email", name="app_verify_email")
+     * @Route("/verify/email", name="app_verify_email", methods={"POST", "GET"})
      */
     public function verifyUserEmail(Request $request, UserRepository $userRepository): Response
     {

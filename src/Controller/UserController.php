@@ -83,17 +83,21 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/users/{slug}/delete", name="delete_user")
+     * @Route("/users/{slug}/delete", name="delete_user", methods={"GET"})
      */
     public function deleteAction(User $user, TokenStorageInterface $token, SessionInterface $session): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        if ($user->getId() !== $this->getUser()->getId()) {
+            $this->addFlash('danger', 'Mauvais utilisateur');
+            return $this->redirectToRoute('index');
+        }
+
         $folder = $this->userDirectory;
-        /*
         if (!empty($user->getPicture())) {
             unlink($folder.'/'.$user->getPicture());
-        } */
+        }
 
         $this->getDoctrine()->getManager()->remove($user);
         $this->getDoctrine()->getManager()->flush();

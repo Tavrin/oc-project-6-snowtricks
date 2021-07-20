@@ -21,7 +21,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/tricks/{slug}", name="trick_show")
+     * @Route("/tricks/{slug}", name="trick_show", methods={"POST", "GET"})
      */
     public function index(Request $request, Trick $trick, CommentRepository $commentRepository): Response
     {
@@ -51,17 +51,18 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/tricks/new", priority="10", name="trick_new")
+     * @Route("/tricks/new", priority="10", name="trick_new", methods={"POST", "GET"})
      */
     public function newAction(Request $request, SluggerInterface $slugger, TrickManager $trickManager): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         if (false === $this->getUser()->isVerified()) {
             $this->addFlash(
                 'danger',
                 "L'adresse email doit être confirmée avant de pouvoir accéder à cette section"
             );
         }
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $trick = new Trick();
         $form = $this->createForm(TrickFormType::class, $trick);
@@ -83,7 +84,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/tricks/{slug}/edit", name="trick_edit")
+     * @Route("/tricks/{slug}/edit", name="trick_edit", methods={"POST", "GET"})
      */
     public function editAction(Request $request, Trick $trick, TrickManager $trickManager): Response
     {
@@ -119,10 +120,11 @@ class TrickController extends AbstractController
 
 
     /**
-     * @Route("/tricks/{slug}/delete", name="trick_remove")
+     * @Route("/tricks/{slug}/delete", name="trick_remove", methods={"GET"})
      */
     public function removeAction(Request $request, Trick $trick): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->getDoctrine()->getManager()->remove($trick);
         $this->getDoctrine()->getManager()->flush();
         $this->addFlash('success', 'La figure '.$trick->getName().' a été supprimée avec succès');
@@ -131,7 +133,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/tricks/{slug}/history", name="trick_history")
+     * @Route("/tricks/{slug}/history", name="trick_history", methods={"GET"})
      */
     public function historyAction(Request $request, Trick $trick): Response
     {
@@ -143,7 +145,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/api/tricks", name="tricks_api_get")
+     * @Route("/api/tricks", name="tricks_api_get", methods={"GET"})
      */
     public function apiGetTricks(Request $request, TrickRepository $trickRepository, TrickManager $trickManager): JsonResponse
     {
