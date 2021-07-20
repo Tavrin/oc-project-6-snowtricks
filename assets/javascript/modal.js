@@ -36,7 +36,7 @@ class Modal {
         }
         if (this.elem.dataset.targetId) {
             this.id = this.elem.dataset.targetId;
-            this.target =document.querySelector('#' + this.elem.dataset.targetId);
+            this.target = document.querySelector('#' + this.elem.dataset.targetId);
             this.button.target = this.target.querySelector('#closeModalButton');
 
             this.addListeners();
@@ -65,7 +65,6 @@ class Modal {
             if (this.target) {
                 this.target.classList.toggle('d-n');
 
-                console.log(utils.store.getKey(this.id+'-type'));
                 if (this.type !== utils.store.getKey(this.id+'-type')) {
                     utils.store.addKey(this.id+'-type', this.type);
                     this.resetModal();
@@ -83,7 +82,13 @@ class Modal {
     resetModal() {
         this.data.title.innerHTML = '';
         this.data.content.innerHTML = '';
+        this.loaded.form = false;
+        this.open.form = false;
         utils.store.addKey(this.id+'-initiated', false);
+        let modal = this.target.querySelector('.modal');
+        if (modal.querySelector('#addMediaButton')) {
+            modal.querySelector('#addMediaButton').remove();
+        }
     }
 
     setModalData() {
@@ -91,18 +96,23 @@ class Modal {
             this.setConfirm();
         }
         if ('image' === this.type || 'video' === this.type) {
-            let galleryView = document.createElement('div');
-            galleryView.id = 'gallery-view';
-            let formView = document.createElement('div');
-            formView.id = 'form-view';
-            let ajaxStatus = document.createElement('p');
-            ajaxStatus.id = 'ajaxStatus';
-            ajaxStatus.innerText = 'chargement...';
-            galleryView.appendChild(ajaxStatus);
-            ajaxStatus.id = 'ajaxStatusNew';
-            formView.appendChild(ajaxStatus);
-            this.data.content.appendChild(galleryView);
-            this.data.content.appendChild(formView);
+            this.data.content.innerHTML =
+                `
+                <div id="gallery-view" class="modal-media-gallery-container">
+                    <p id="ajaxStatus">chargement...</p>
+                </div>
+                <div id="form-view" class="d-n">
+                    <p id="ajaxStatusNew">chargement...</p>
+                </div>
+                `
+            ;
+            let modal = this.target.querySelector('.modal');
+            let newMediaButton = document.createElement('button');
+            newMediaButton.id = 'addMediaButton';
+            newMediaButton.classList.add('btn');
+            newMediaButton.innerText = `Ajouter une ${this.type}`;
+            modal.insertBefore(newMediaButton, modal.children[2]);
+
             this.galleryView = this.target.querySelector('#gallery-view');
             this.formView = this.target.querySelector('#form-view');
             if ('image' === this.type) {
@@ -120,6 +130,7 @@ class Modal {
         this.data.title.innerHTML = 'Confirmation de suppression';
         let cancelButton = document.createElement('button');
         cancelButton.id = 'modalCancelButton';
+        cancelButton.classList.add('btn', 'm-r-1');
         cancelButton.innerText = 'Annuler';
         cancelButton.addEventListener('click', () => {
             this.target.classList.toggle('d-n');
@@ -127,6 +138,7 @@ class Modal {
         this.data.content.appendChild(cancelButton);
         let confirmButton = document.createElement('button');
         confirmButton.innerText = 'Confirmer';
+        confirmButton.classList.add('btn', 'btn-danger');
         confirmButton.id = 'modalConfirmButton';
         confirmButton.addEventListener('click', () => {
             window.location.href = this.url;
@@ -138,100 +150,255 @@ class Modal {
 
     setVideo() {
         this.data.title.innerHTML = 'Galerie vidéo';
+        this.target.querySelector('#addMediaButton').addEventListener('click', (e) => {this.modalButtonAddMedia(e)});
+        let slug = this.getTrickSlug();
+        let videosContainer = document.createElement('div');
+        videosContainer.classList.add('modal-video-gallery-container');
+        this.galleryView.appendChild(videosContainer);
+
+        utils.ajax(`/api/tricks/${slug}/videos`).then(data => {
+            if (this.target.querySelector('#ajaxStatus')) {
+                document.querySelector('#ajaxStatus').style.display = 'none';
+            }
+            data.response.forEach(e => {
+                let containerItem = this.createVideoItem(e)
+
+                videosContainer.appendChild(containerItem);
+            })
+            videosContainer.querySelectorAll('.modal-video-button-delete').forEach((e) => {
+                e.addEventListener('click', () => {this.deleteVideo(e)})
+            });
+        })
+    }
+
+    createVideoItem(e) {
+        let containerItem = document.createElement('div');
+        containerItem.classList.add('modal-video-item')
+        if ('youtube' === e.type) {
+            containerItem.innerHTML =
+                `
+                    <iframe width="100%" height="200rem" src="https://www.youtube.com/embed/${e.url}"
+                    title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write;
+                    encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                     <div class="modal-image-info">
+                         <button class="btn-modal modal-video-button-delete" data-id="${e['id']}" >Supprimer</button>
+                    </div>
+                    `
+            ;
+        }
+
+        return containerItem;
+    }
+
+    addImageToContainer(item, container, type = 'add') {
+        if ('add' === type) {
+            type = `<button class="btn-modal modal-media-button-add" data-id="${item['id']}" >Ajouter à la figure</button>`;
+        } else if('remove' === type) {
+            type =
+                `
+                <button class="btn-modal modal-media-button-main" data-path="${item['file']}">Sélectionner comme média principal</button>
+                <button class="btn-modal modal-media-button-remove" data-id="${item['id']}" >Supprimer de la figure</button>
+                `
+            ;
+        }
+        let containerItem = document.createElement('div');
+        containerItem.innerHTML =
+            `
+            <img src="${item['file']}">
+            <div class="modal-image-info">
+                <p>${item.name}</p>
+                ${type}
+                <button class="btn-modal modal-media-button-delete" data-id="${item['id']}" >Supprimer</button>
+            </div>
+            `
+        ;
+
+        containerItem.classList.add('modal-image-item');
+        container.appendChild(containerItem);
+    }
+
+    addMediaToGallery() {
+        this.galleryView.innerHTML +=
+            `
+            <h3>Images associées à la figure</h3>
+            <div id="trickImages" class="modal-media-gallery">
+            </div>
+            <hr>
+            <h3>Autres images disponibles</h3>
+            <div id="otherImages" class="modal-media-gallery">
+            </div>
+            `
+        ;
+
+        let trickImages = this.target.querySelector('#trickImages');
+        let otherImages = this.target.querySelector('#otherImages');
+        let slug = this.getTrickSlug();
+
+        this.data.title.innerHTML = 'Galerie d\'images';
+        this.target.querySelector('#addMediaButton').addEventListener('click', (e) => {this.modalButtonAddMedia(e)});
+        utils.ajax(`/api/tricks/${slug}/images`, 'GET').then(data => {
+            if (this.target.querySelector('#ajaxStatus')) {
+                document.querySelector('#ajaxStatus').remove();
+            }
+            data.response.forEach(element => {
+                this.addImageToContainer(element, trickImages, 'remove');
+            })
+
+            if (trickImages.children.length === 0) {
+                trickImages.innerHTML =
+                    `
+                    <p>Aucune image associée à la figure</p>   
+                    `
+            }
+
+            this.target.querySelectorAll('.modal-media-button-remove').forEach((e) => {
+                e.addEventListener('click', () => {this.removeMediaFromTrick(e)})
+            });
+        });
+
+        utils.ajax(`/api/media/images?excluded-tricks=${slug}`).then(data => {
+
+            data.response.forEach(element => {
+                this.addImageToContainer(element, otherImages);
+            })
+
+            this.target.querySelectorAll('.modal-media-button-main').forEach((e) => {
+                e.addEventListener('click', () => {this.setMainMedia(e)})
+            });
+            this.target.querySelectorAll('.modal-media-button-add').forEach((e) => {
+                e.addEventListener('click', () => {this.addMediaToTrick(e)})
+            });
+
+            this.target.querySelectorAll('.modal-media-button-delete').forEach((e) => {
+                e.addEventListener('click', () => {this.deleteMedia(e)})
+            });
+
+            this.loaded.gallery = true;
+        });
+
+    }
+
+    modalButtonAddMedia(e = null) {
+        let link = '';
+        const slug = this.getTrickSlug();
+        'image' === this.type ? link = '/api/media/images/new' : link = `/api/tricks/${slug}/videos/new`;
+        this.setFormReturn(e);
+        if (true === this.open.form) {
+            this.resetModal();
+            this.setModalData();
+            return;
+        }
+
+        this.galleryView.style.display = this.galleryView.style.display === 'none' ? '' : 'none';
+
+        if (false === this.loaded.form) {
+            utils.ajax(link).then(data => {
+                if (200 === data.status) {
+                    this.setForm(data);
+                }
+            })
+        }
+
+        this.formView.classList.toggle('d-n');
+
+        this.open.form = !this.open.form ;
+    }
+
+    setFormReturn(e) {
+        if (!this.open.form) {
+            e.currentTarget.textContent = 'Retour';
+        } else if (e) {
+            e.currentTarget.textContent = `Ajouter une ${this.type}`;
+        }
+    }
+
+    setForm(data) {
+        let form = document.createRange().createContextualFragment(data.response);
+        this.formView.appendChild(form);
+        this.loaded.form = true;
+        if (this.target.querySelector('#ajaxStatusNew')) {
+            document.querySelector('#ajaxStatusNew').style.display = 'none';
+        }
+        this.formView.querySelector('form').addEventListener('submit', (e) => this.createNewMedia(e))
+    }
+
+    createNewMedia(e) {
+        e.preventDefault();
+        let link = '';
+        const slug = this.getTrickSlug();
+        'image' === this.type ? link = '/api/media/images/new' : link = `/api/tricks/${slug}/videos/new`;
+        let form = this.formView.querySelector('form')
+        const formData = new FormData(form);
+        utils.ajax(link, 'POST', formData).then(data => {
+            if (201 === data.status) {
+                this.resetModal();
+                this.setModalData();
+            }
+        });
+    }
+
+    getTrickSlug()
+    {
         let slug = null;
         if (this.elem.dataset.slug) {
             slug = this.elem.dataset.slug;
         } else if (metadata) {
             slug = metadata.slug ?? null ;
         }
-        utils.ajax(`/api/tricks/${slug}/videos`).then(data => {
-            if (this.target.querySelector('#ajaxStatus')) {
-                document.querySelector('#ajaxStatus').style.display = 'none';
+
+        return slug;
+    }
+
+    deleteMedia(e) {
+        utils.ajax(`/api/media/images/${e.dataset.id}`, 'DELETE', JSON.stringify({id: e.dataset.id})).then(data => {
+            if (200 !== data.status) {
+                utils.addFlash("une erreur s'est produite", 'danger')
+            } else {
+                utils.addFlash("Image supprimée avec succès")
+                this.resetModal();
+                this.setModalData();
             }
-            data.response.forEach(e => {
-                console.log(data.response);
-                let containerItem = document.createElement('div');
-                containerItem.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/watch?v=arzLq-47QFA"
-                                            title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write;
-                                             encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-                this.galleryView.appendChild(containerItem);
-            })
         })
     }
 
-    addMediaToGallery() {
-        if ('image' === this.type) {
-            this.data.title.innerHTML = 'Galerie d\'images';
-            let newImage = this.target.querySelector('#addImageButton');
-            newImage.addEventListener('click', (e) => {this.modalButtonAddImage(e)});
-
-                utils.ajax('/api/media/images').then(data => {
-                    if (this.target.querySelector('#ajaxStatus')) {
-                        document.querySelector('#ajaxStatus').style.display = 'none';
-                    }
-                    console.log(data);
-                    data.response.forEach(element => {
-                        console.log(element);
-                        let containerItem = document.createElement('div');
-                        let imageInfo = document.createElement('div');
-                        imageInfo.innerHTML = `
-                            <p>${element.name}</p>
-                            <button class="button-bb-wc modal-media-button" data-path="${element['file']}" >Sélectionner</button>
-                            `;
-                        containerItem.classList = 'maw-22 d-f p-1 fd-c ai-c jc-sb';
-                        let item = document.createElement('img');
-                        item.src = element['file'];
-                        item.classList = 'maw-100 of-cov';
-                        containerItem.appendChild(item);
-                        containerItem.appendChild(imageInfo);
-                        this.galleryView.appendChild(containerItem);
-                    })
-
-                    document.querySelectorAll('.modal-media-button').forEach((e) => {
-                        e.addEventListener('click', () => {this.modalButtonGetMedias(e)})
-                    });
-                    this.loaded.gallery = true;
-                });
-        }
-    }
-
-    modalButtonAddImage(e = null) {
-        if (!this.open.form) {
-            e.currentTarget.textContent = 'Retour';
-        } else if (e) {
-            e.currentTarget.textContent = 'Ajouter une image';
-        }
-
-        this.galleryView.classList.toggle('d-n');
-        if (false === this.loaded.form) {
-            let iframe = document.createElement('iframe');
-            iframe.src = '/modal/media/images/new'
-            iframe.classList.add('iframe')
-            this.loaded.form = true;
-            this.formView.appendChild(iframe);
-        }
-
-        this.formView.classList.toggle('d-n');
-        if (true === this.open.form) {
-            this.addMediaToGallery();
-        }
-        this.open.form = !this.open.form ;
-    }
-
-    createNewMedia(e, form) {
-        const formData = new FormData(form);
-        utils.ajax('/api/medias/new', 'POST', formData).then(data => {
-            if ('ok' === data.response) {
-                this.loaded.gallery = false;
-                this.galleryView.innerHTML = '';
-                let button = this.target.querySelector('#addImageButton');
-                let event = new Event('click');
-                button.dispatchEvent(event);
+    deleteVideo(e) {
+        utils.ajax(`/api/videos/${e.dataset.id}`, 'DELETE', JSON.stringify({id: e.dataset.id})).then(data => {
+            if (200 !== data.status) {
+                utils.addFlash("une erreur s'est produite", 'danger')
+            } else {
+                utils.addFlash("Vidéo supprimée avec succès")
+                this.resetModal();
+                this.setModalData();
             }
-        });
+        })
     }
 
-    modalButtonGetMedias(e) {
+    removeMediaFromTrick(e) {
+        let slug = this.getTrickSlug();
+        utils.ajax(`/api/tricks/${slug}/images`, 'DELETE', JSON.stringify({id: e.dataset.id})).then(data => {
+            if (200 !== data.status) {
+                alert(data.response);
+            } else {
+                this.resetModal();
+                this.setModalData();
+            }
+        })
+    }
+
+    addMediaToTrick(e) {
+        let slug = this.getTrickSlug();
+        utils.ajax(`/api/tricks/${slug}/images`, 'POST', JSON.stringify({id: e.dataset.id})).then(data => {
+            if (201 !== data.status) {
+                alert(data.response);
+            } else {
+                this.resetModal();
+                this.setModalData();
+            }
+        })
+
+    }
+
+    setMainMedia(e) {
         this.target.classList.toggle('d-n');
         let inputTarget = document.querySelector('#trick_form_mainMedia');
         let divShow = document.querySelector('#mediaShow');

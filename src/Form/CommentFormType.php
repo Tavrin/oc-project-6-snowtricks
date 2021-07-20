@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -29,7 +30,15 @@ class CommentFormType extends AbstractType
                 'attr' => [
                     'cols' => '55',
                     'rows' => '5'
-                ]
+                ],
+                'constraints' => [
+                    new Assert\Length([
+                        'min' => 2,
+                        'max' => 500,
+                        'minMessage' => 'Le commentaire doit faire au moins {{ limit }} caractères',
+                        'maxMessage' => 'Le commentaire ne doit pas faire plus de {{ limit }} caractères',
+                    ])
+                   ]
             ])
             ->add('parentId', HiddenType::class, [
                 'mapped' => false,

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\MediaRepository;
@@ -53,6 +54,7 @@ class Media
 
     public function __construct()
     {
+        $this->createdAt = new DateTime();
         $this->trickMedia = new ArrayCollection();
     }
 
@@ -88,27 +90,27 @@ class Media
     /**
      * @return Collection|TrickMedia[]
      */
-    public function getTrickMedia(): Collection
+    public function getTrickMedias(): Collection
     {
         return $this->trickMedia;
     }
 
-    public function addTrickMedium(TrickMedia $trickMedium): self
+    public function addTrickMedia(TrickMedia $trickMedia): self
     {
-        if (!$this->trickMedia->contains($trickMedium)) {
-            $this->trickMedia[] = $trickMedium;
-            $trickMedium->setMedia($this);
+        if (!$this->trickMedia->contains($trickMedia)) {
+            $this->trickMedia[] = $trickMedia;
+            $trickMedia->setMedia($this);
         }
 
         return $this;
     }
 
-    public function removeTrickMedium(TrickMedia $trickMedium): self
+    public function removeTrickMedia(TrickMedia $trickMedia): self
     {
-        if ($this->trickMedia->removeElement($trickMedium)) {
+        if ($this->trickMedia->removeElement($trickMedia)) {
             // set the owning side to null (unless already changed)
-            if ($trickMedium->getMedia() === $this) {
-                $trickMedium->setMedia(null);
+            if ($trickMedia->getMedia() === $this) {
+                $trickMedia->setMedia(null);
             }
         }
 

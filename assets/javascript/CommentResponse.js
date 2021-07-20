@@ -37,44 +37,12 @@ export default class CommentResponse {
         let formData = new FormData(form);
         this.message = formData.get('comment_form[content]');
         utils.ajax('/api/comments/new', 'POST', formData).then(data => {
-            let flash;
-            let header = document.querySelector('.header');
             if(data['status'] === 201) {
-                flash = `
-                    <div class="flash flash-success ajax-flash" role="alert">
-                        Commentaire rajouté avec succès
-                        <button class="flash-close"></button>
-                    </div>
-                `
-                flash = document.createRange().createContextualFragment(flash);
-
-                let message = `
-            <div id="" class="comment-item new">
-                <div class="w-100 d-f mb-1-5">
-                    <div>
-                        <span class="fw-900 d-b mb-0-5"><a href="#">${data.user}</a></span>
-                    </div>
-                </div>
-                <p class="ta-l w-100">${this.message}</p>
-                </div>
-            </div>
-            `
-                message = document.createRange().createContextualFragment(message);
-                let container = document.querySelector(`#answers-${this.params.pid}`);
-                container.insertBefore(message, container.firstChild);
-                this.target.remove();
+                location.reload();
             } else {
-                flash = `
-                    <div class="flash flash-danger ajax-flash" role="alert">
-                        Le commentaire n'a pas pu être ajouté
-                        <button class="flash-close"></button>
-                    </div>
-                `
-                flash = document.createRange().createContextualFragment(flash);
+                utils.addFlash('Le commentaire n\'a pas pu être ajouté', 'danger');
             }
 
-            utils.addFlash(flash);
-            header.appendChild(flash);
             this.state = false;
         })
     }

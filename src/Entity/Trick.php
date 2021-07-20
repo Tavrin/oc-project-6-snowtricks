@@ -6,9 +6,12 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
+ * @UniqueEntity("name", message="Cette figure existe déjà")
+ * @UniqueEntity("slug", message="Cette figure existe déjà")
  */
 class Trick
 {
@@ -20,7 +23,7 @@ class Trick
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $name;
 
@@ -45,12 +48,12 @@ class Trick
     private $trickGroup;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickMedia::class, mappedBy="media", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=TrickMedia::class, mappedBy="trick", orphanRemoval=true)
      */
     private $trickMedia;
 
     /**
-     * @ORM\OneToMany(targetEntity=TrickModify::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=TrickModify::class, mappedBy="trick", cascade={"remove"})
      */
     private $trickModifies;
 
@@ -65,7 +68,7 @@ class Trick
     private $mainMedia;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $slug;
 
@@ -76,6 +79,7 @@ class Trick
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->trickMedia = new ArrayCollection();
         $this->trickModifies = new ArrayCollection();
         $this->comments = new ArrayCollection();
@@ -150,27 +154,73 @@ class Trick
     /**
      * @return Collection|TrickMedia[]
      */
-    public function getTrickMedia(): Collection
+    public function getTrickMedias(): Collection
     {
         return $this->trickMedia;
     }
 
-    public function addTrickMedium(TrickMedia $trickMedium): self
+
+    /**
+     * @param int $mediaId
+     * @return TrickMedia|null
+     */
+    public function getTrickMedia(int $mediaId): ?TrickMedia
     {
-        if (!$this->trickMedia->contains($trickMedium)) {
-            $this->trickMedia[] = $trickMedium;
-            $trickMedium->setMedia($this);
+        foreach ($this->trickMedia as $trickMedia) {
+            if ($mediaId === $trickMedia->getMedia()->getId()) {
+                return $trickMedia;
+            }
+        }
+
+        return null;
+    }
+
+    public function addTrickMedia(TrickMedia $trickMedia): self
+    {
+        if (!$this->trickMedia->contains($trickMedia)) {
+            $this->trickMedia[] = $trickMedia;
+            $trickMedia->setMedia($this);
         }
 
         return $this;
     }
 
-    public function removeTrickMedium(TrickMedia $trickMedium): self
+    /**
+     * @param int $mediaId
+     * @return bool
+     */
+    public function hasMedia(int $mediaId): bool
     {
-        if ($this->trickMedia->removeElement($trickMedium)) {
+        foreach ($this->trickMedia as $trickMedia) {
+            if ($mediaId === $trickMedia->getMedia()->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function removeTrickMedia(TrickMedia $trickMedia): self
+    {
+        if ($this->trickMedia->removeElement($trickMedia)) {
             // set the owning side to null (unless already changed)
-            if ($trickMedium->getMedia() === $this) {
-                $trickMedium->setMedia(null);
+            if ($trickMedia->getMedia() === $this) {
+                $trickMedia->setMedia(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeTrickMediaFromMediaId(int $mediaId): self
+    {
+        foreach ($this->trickMedia as $trickMedia) {
+            if ($mediaId === $trickMedia->getMedia()->getId()) {
+                $this->trickMedia->removeElement($trickMedia);
+                if ($trickMedia->getMedia() === $this) {
+                    $trickMedia->setMedia(null);
+                }
+
             }
         }
 

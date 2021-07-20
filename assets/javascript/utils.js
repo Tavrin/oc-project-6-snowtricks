@@ -1,7 +1,8 @@
 "use strict";
 
 const utils = {};
-let test = 1;
+let header = document.querySelector('.header');
+
 utils.addCloseEventOnParent = (e) => {
     e.currentTarget.parentNode.style.display = 'none';
 }
@@ -37,10 +38,7 @@ utils.ajax = (link, method = 'GET', body = null) => {
             if (response.ok) {
                 return response.json();
             } else {
-                return Promise.reject({
-                    status: response.status,
-                    statusText: response.statusText
-                });
+                return response.json();
             }
         })
         .then((data) => {
@@ -66,11 +64,36 @@ utils.store = {
     }
 }
 
-utils.addFlash = (alert) => {
-    if (alert.querySelectorAll('.flash-close').length > 0) {
-        let button = alert.querySelectorAll('.flash-close')[0];
+utils.addFlash = (message, type = 'success') => {
+    let flash;
+    if (type && ('danger' === type || 'error' === type)) {
+        flash = `
+                    <div class="flash flash-danger ajax-flash" role="alert">
+                        ${message}
+                        <button class="flash-close"></button>
+                    </div>
+                `
+        flash = document.createRange().createContextualFragment(flash);
+    } else {
+        flash = `
+                    <div class="flash flash-success ajax-flash" role="alert">
+                        ${message}
+                        <button class="flash-close"></button>
+                    </div>
+                `
+        flash = document.createRange().createContextualFragment(flash);
+    }
+
+    utils.setFLashEvent(flash);
+    header.appendChild(flash);
+}
+
+utils.setFLashEvent = (flash) => {
+    if (flash.querySelectorAll('.flash-close').length > 0) {
+        let button = flash.querySelectorAll('.flash-close')[0];
         button.addEventListener('click', utils.addCloseEventOnParent);
     }
+
 }
 
 export {utils};

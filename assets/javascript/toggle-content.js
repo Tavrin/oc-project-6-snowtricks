@@ -1,7 +1,8 @@
 "use strict";
 
-class ToggleContent {
+export default class ToggleContent {
     constructor(elem) {
+        this.elem = elem;
         this.state = true;
         this.type = null;
         this.options = [];

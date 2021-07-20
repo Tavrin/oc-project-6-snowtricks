@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TrickModifyRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,14 +24,29 @@ class TrickModify
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="trickModifies")
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="trickModifies", cascade="persist")
      */
     private $trick;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trickModifies")
+     * @ORM\Column(type="string", length=255)
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $modifiedFields = [];
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -61,14 +77,38 @@ class TrickModify
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?string
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(?string $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getModifiedFields(): ?array
+    {
+        return $this->modifiedFields;
+    }
+
+    public function setModifiedFields(?array $modifiedFields): self
+    {
+        $this->modifiedFields = $modifiedFields;
 
         return $this;
     }

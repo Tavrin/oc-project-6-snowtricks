@@ -8,11 +8,13 @@
 
         {{ form_start(resetForm, {'attr' : {'class' : 'trick-editor-form'}}) }}
          <div class="form-group">
-            {{ form_label(resetForm.plainPassword.first) }}
+             <div style="color: red!important;">{{ form_errors(resetForm.plainPassword.first) }}</div>
+             {{ form_label(resetForm.plainPassword.first) }}
             {{ form_widget(resetForm.plainPassword.first, { attr: {'class': 'form-control'}}) }}
          </div>
     <div class="form-group">
-            {{ form_label(resetForm.plainPassword.second) }}
+        <div style="color: red!important;">{{ form_errors(resetForm.plainPassword.second) }}</div>
+        {{ form_label(resetForm.plainPassword.second) }}
             {{ form_widget(resetForm.plainPassword.second, { attr: {'class': 'form-control'}}) }}
     </div>
             <button class="btn btn-primary">Réinitialiser le mot de passe</button>

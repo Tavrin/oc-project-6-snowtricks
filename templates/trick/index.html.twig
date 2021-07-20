@@ -12,20 +12,26 @@
 {% endblock %}
 {% set commentWidget = form_widget(commentForm.content, { attr: {'class': 'form-control'}}) %}
 {% block body %}
-{% macro showChild(comment, level) %}
+    {% include 'partials/inc/confirm_modal.html.twig' %}
+    {% macro showChild(comment, level) %}
     {% import _self as macros %}
-<div id="" class="comment-item {% if level is even %}answers-even{% else %}{% endif %}">
-    <div class="w-100 d-f mb-1-5">
-        <div>
-            <span class="fw-900 d-b mb-0-5"><a href="{{ comment.user.path??'#' }}">{{ comment.user.username?? 'utilisateur supprimé' }}</a></span>
+<div id="comment-item-{{ comment.id }}" class="comment-item {% if level is even %}answers-even{% endif %}">
+    {% if level > 0 %}<div class="comment-item-body">{% endif %}
+        <div class="w-100 d-f mb-1-5">
+            <div>
+                <span class="fw-900 d-b mb-0-5"><img class="avatar" src="{{ comment.user and comment.user.picture ? '/uploads/users-images/' ~ comment.user.picture : asset('build/images/user-placeholder.png') }}" alt=""><a class="comment-username" href="{{ comment.user and comment.user.slug? '/users/' ~ comment.user.slug : '#' }}">{{ comment.user.username?? 'utilisateur supprimé' }}</a></span>
+            </div>
         </div>
-    </div>
-    <p class="ta-l w-100">{{ comment.status == true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>' }}</p>
-    {% if level < 5 %}
-    <span style="text-align: right" class="js-toggle comment-response" data-pid="{{ comment.id }}" data-target-id="response-{{ comment.id }}" data-type="display">Répondre</span>
-    <div class="d-n" id="response-{{ comment.id }}">
-    </div>
-    {% endif %}
+        <p class="ta-l w-100">{{ comment.status == true ? comment.content : '<span class="text-muted fw-900 bcg-light2 p-0-5 br-25">Commentaire en attente de modération</span>' }}</p>
+        <div class="comment-item-metadata">
+            <span class="comment-item-metadata-date-info">Posté le <span class="comment-item-metadata-date">{{ comment.createdAt|date("d/m/Y") }}</span></span>
+            {% if level < 5 %}
+            <span style="text-align: right" class="js-toggle comment-response" data-pid="{{ comment.id }}" data-target-id="response-{{ comment.id }}" data-type="display">Répondre</span>
+        </div>
+        <div class="d-n" id="response-{{ comment.id }}">
+        </div>
+    {% if level > 0 %}</div>{% endif %}
+
     <div id="answers-{{ comment.id }}">
             {% set level = level + 1 %}
         {% for child in comment.children %}
@@ -33,30 +39,61 @@
             {{ macros.showChild(child, level) }}
         {% endfor %}
         </div>
-    </div>
+    {% endif %}
+</div>
 {% endmacro %}
 
     <section id="trick-show">
         <div id="trick-show-zone">
-            <div class="trick-show-header" {% if content.trick.mainMedia is defined and content.trick.mainMedia is not empty %} style="background-image: url('/uploads/tricks-images/{{ content.trick.mainMedia.file }}')!important; background-size: contain; background-repeat: no-repeat"{% endif %}>
-                <div id="landing-zone-text">
-                    <h1 class="zone-title">{{ content.trick.name }}</h1>
-                </div>
+            <div id="trick-zone-title-div">
+                <h1 class="zone-title">{{ content.trick.name }}</h1>
             </div>
-            <div class="trick-show-media">
+            <div class="div-history">
+                <a class="trick-show-history btn" href="/tricks/{{ content.trick.slug }}/history">Historique</a>
+                {% if app.user is defined and app.user is not empty %}
+                    <a class="btn" href="/tricks/{{ content.trick.slug }}/edit"><i class="fas fa-pen"></i></a>
+                    <a class="js-modal btn" data-type="confirm" data-target-id="confirmModal" href="/tricks/{{ content.trick.slug }}/delete"><i class="fas fa-trash"></i></a>
+                {% endif %}
             </div>
-                                        <h2>Description</h2>
 
+            <div class="trick-show-header" {% if content.trick.mainMedia is defined and content.trick.mainMedia is not empty %} style="background-image: url('/uploads/tricks-images/{{ content.trick.mainMedia.file }}')!important; background-size: cover; background-repeat: no-repeat"{% endif %}>
+            </div>
+            <h2 class="trick-show-section-title">Description</h2>
             <div class="trick-show-info">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquid aut excepturi exercitationem omnis veritatis voluptate. Assumenda libero magni neque reiciendis rerum tenetur unde. Aliquid at inventore molestiae mollitia necessitatibus nihil non quasi reprehenderit soluta tenetur. Accusamus accusantium aperiam architecto aut cum cupiditate delectus distinctio earum eum eveniet expedita hic in inventore ipsum laboriosam libero magnam molestias neque nisi nostrum, nulla perferendis porro praesentium quidem recusandae repellat, repellendus saepe sed vel voluptate. Dolores facere iure non quod vel! Ad, cum cupiditate delectus deleniti ex ipsa laboriosam minima modi nulla praesentium quas saepe sequi unde voluptates voluptatum. Assumenda consectetur dignissimos facere, hic id magni maxime mollitia obcaecati perferendis praesentium provident, recusandae totam veniam! Amet aperiam at corporis cupiditate debitis et, facilis fuga illo nam, odio, quibusdam quis quisquam ratione rem sequi ut voluptas voluptatem? Alias ducimus eaque enim, ex hic quas veniam. Accusamus aliquam animi aperiam eius eum fuga fugit ipsum itaque iure iusto nam necessitatibus nihil nostrum omnis quia quidem ratione sequi sunt, vel voluptatum! Architecto nisi pariatur perspiciatis tempore. Ab ad adipisci, aliquam aut autem consequuntur, cupiditate ea eaque magnam maxime minima natus neque perferendis provident quisquam reiciendis, repudiandae voluptas. Ex expedita facere facilis illo laboriosam modi necessitatibus nemo nobis quia rem? Aut, minima sint? Ad amet assumenda, beatae cumque fugit iste magnam nulla ullam vitae voluptatum. A accusamus aliquam aliquid aperiam blanditiis dignissimos ea eaque est facere hic impedit iste, minima, neque nobis quibusdam ratione, recusandae rem repellat sed sequi sint tempore tenetur unde ut voluptas. Beatae esse itaque neque quis! Aliquam, quia.</p>
                 <p>{{ content.trick.description }}</p>
-                <div class="trick-show-metadata">
-                    <span class="trick-show-metadata-item m-r-1">Création : {{ content.trick.createdAt|date("d M Y") }}</span>
-                    {% if content.trick.updatedAt is defined and content.trick.updatedAt is not empty %}
-                        <span class="trick-show-metadata-item m-r-1">Modification : {{ content.trick.updatedAt|date("d/m/Y") }}</span>
+            </div>
+            <div id="trick-show-media">
+                <h2 class="trick-show-section-title">Médias</h2>
+                <i class="trick-show-media-collapse fas fa-chevron-up js-toggle" data-type="display" data-target-Id="trick-show-media-body" data-options='{"icons":["fa-chevron-up", "fa-chevron-down"]}'></i></span>
+                <div id="trick-show-media-body">
+                    <h3>Images</h3>
+                    {% if content.trick.trickMedias is defined and content.trick.trickMedias is not empty %}
+                        <div id="trick-show-images">
+                            {% for trickMedia in content.trick.trickMedias %}
+                                <img class="trick-show-image" src="/uploads/tricks-images/{{ trickMedia.media.file }}" alt="">
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>La figure ne contient pas d'images</p>
                     {% endif %}
-                    <span class="trick-show-metadata-item">Groupe : {{ content.trick.trickGroup.name }}</span>
+                    <h3>Vidéos</h3>
+                    {% if content.trick.videos is defined and content.trick.videos is not empty %}
+                        {% for video in content.trick.videos %}
+                            <iframe class="trick-show-video-item" width="270rem" height="150rem" src="https://www.youtube.com/embed/{{ video.url }}"
+                                    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write;
+                        encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        {% endfor %}
+                    {% else %}
+                        <p>La figure ne contient pas de vidéos</p>
+                    {% endif %}
                 </div>
+            </div>
+            <div class="trick-show-metadata">
+                <span class="trick-show-metadata-item">Création : {{ content.trick.createdAt|date("d M Y") }}</span>
+                {% if content.trick.updatedAt is defined and content.trick.updatedAt is not empty %}
+                    <span class="trick-show-metadata-item">Modification : {{ content.trick.updatedAt|date("d/m/Y") }}</span>
+                {% endif %}
+                <span class="trick-show-metadata-item">Groupe : {{ content.trick.trickGroup.name }}</span>
             </div>
         </div>
         <div id="trick-show-comments" class="bt-dg">
@@ -65,10 +102,15 @@
                 {% include '/partials/inc/comment.html.twig' with {'type': 'new'} %}
             </div>
             {% if content.comments is defined and content.comments is not empty %}
+                <div id="comments-zone">
                 {% set level = 0 %}
                 {% for comment in content.comments %}
                     {{ macros.showChild(comment, level) }}
                 {% endfor %}
+                </div>
+                {% if content.count > content.comments|length %}
+                    <a class="btn center" id="js-loadComments" data-trick-id="{{ content.trick.id }}" data-current-count="{{ content.comments|length }}" href="">Charger plus de commentaires</a>
+                {% endif %}
             {% else%}
                 <div id="" class="comment-item">
                     Aucun commentaire

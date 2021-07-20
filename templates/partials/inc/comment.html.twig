@@ -1,6 +1,7 @@
     {% if app.user is defined and app.user is not empty and app.user.isVerified == true %}
         {{ form_start(commentForm) }}
         <div class="form-group">
+            <div style="color: red!important;">{{ form_errors(commentForm.content) }}</div>
             {% if 'type' == 'new' %}
                 {{ form_label(commentForm.content, 'Commentaire', {'label_attr': {'class': 'form-label'}}) }}
             {% endif %}

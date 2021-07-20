@@ -30,6 +30,7 @@ class CommentManager
     public function saveComment(Comment $comment, $user, FormInterface $form): Comment
     {
         $trickId = null;
+        $trick = null;
         if ($form->has('trickId')) {
             $trickId = $form->get('trickId')->getData();
         }
@@ -46,7 +47,9 @@ class CommentManager
 
         $comment->setStatus(true);
         $comment->setTrick($trick);
-        $comment->setParent($parent);
+        if (isset($parent)) {
+            $comment->setParent($parent);
+        }
         $comment->setCreatedat(new DateTime);
         $comment->setUser($user);
         $this->em->persist($comment);
@@ -71,13 +74,31 @@ class CommentManager
         }
 
         if (isset($content['trickId'])) {
-            if ($this->em->getRepository(Comment::class)->find($content['trickId'])) {
+            if ($this->em->getRepository(Trick::class)->find($content['trickId'])) {
                 $content['trickId'] = (int)$content['trickId'];
             } else {
                 $content['trickId'] = null;
             }
         } else {
             $content['trickId'] = null;
+        }
+
+        return $content;
+    }
+
+    public function hydrateCommentArray($entities): array
+    {
+        $content = [];
+
+        foreach ($entities as $key => $entity) {
+            $content[$key]['id'] = $entity->getId();
+            $content[$key]['content'] = $entity->getContent();
+            $content[$key]['status'] = $entity->getStatus();
+            $content[$key]['user'] = $entity->getUser()->getUsername();
+            if ($entity->getParent()) {
+                $content[$key]['parentId'] = $entity->getParent()->getId();
+            }
+            $content[$key]['createdAt'] = $entity->getCreatedAt()->format("d/m/Y");
         }
 
         return $content;

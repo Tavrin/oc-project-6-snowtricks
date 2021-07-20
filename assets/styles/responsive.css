@@ -1,0 +1,262 @@
+@media screen and (max-width: 1023px) {
+    #logo {
+        font-size: 1.2rem;
+    }
+
+    #categoryDropdownLinks {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #navDropDown {
+        display: initial;
+        color: white;
+        font-size: 2rem;
+    }
+
+    #navLinks {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #navLinks.active {
+        display: flex;
+    }
+
+    #navbar-logo {
+        padding-top: 0;
+    }
+
+    #main-navbar {
+        align-items: flex-start;
+    }
+
+    #site-title {
+        font-size: 2.7rem;
+    }
+
+    #site-slogan {
+        font-size: 1.70rem;
+    }
+
+    .landing-zone-arrow-down {
+        font-size: 2rem;
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+    }
+
+    .zone-title {
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+    }
+
+    .landing-tricks-actions {
+        margin-left: auto;
+        margin-right: auto;
+        flex-direction: column;
+    }
+
+    .landing-tricks-actions form, .landing-tricks-actions a {
+        margin-top: 2rem;
+    }
+
+    .trick-search-form {
+        flex-direction: column;
+    }
+
+    .trick-search-form * {
+        margin-left: initial;
+    }
+
+    .btn-new-trick {
+        margin-left: initial;
+    }
+
+    .trick-show-info {
+        width: 90%;
+    }
+
+    .trick-show-metadata {
+        display: flex;
+        flex-direction: column;
+        align-items: baseline;
+    }
+
+    .trick-show-metadata * {
+        margin-bottom: .5rem;
+    }
+
+    .trick-show-header {
+        height: 20vh;
+        margin-bottom: 2rem;
+    }
+
+    .trick-item {
+        margin-left: auto;
+        margin-right: auto;
+        width: 95%;
+        height: max-content;
+    }
+
+    #trick-show-media-body {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .trick-show-video-item {
+        margin-bottom: 1rem;
+    }
+
+    #settings-zone {
+        flex-direction: column;
+    }
+
+    .settings-zone-left {
+        width: 100%;
+        padding-left: unset;
+        border-right: unset;
+        min-height: unset;
+    }
+
+    .settings-bar-left-item {
+        width: 100%;
+    }
+
+    .settings-zone-right {
+        padding-left: unset;
+        padding-right:unset;
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 1rem;
+    }
+
+    .profile-settings-button {
+        align-self: center!important;
+    }
+
+    #modify_profile_form_file {
+        max-width: 15rem;
+    }
+
+    #email-verification-status .btn {
+        display: block;
+    }
+
+    #trick-show-comments {
+        width: 90%;
+    }
+
+    .profile-editor-form {
+        width: 95%;
+        margin-top: 2rem;
+    }
+
+    .settings-zone-right h1 {
+        align-self: center!important;
+        margin-bottom: 2rem;
+    }
+
+    #trick-show-media {
+        width: 95%;
+    }
+
+    #comments-zone {
+        width: 100%;
+    }
+
+    #profile-zone-left-side .avatar, .settings-zone-right .avatar {
+        width: 6rem;
+        margin-bottom: 1rem;
+        height: 6rem;
+    }
+
+    #profile-settings-image {
+        margin-right: 1rem;
+    }
+
+    #profile-zone {
+        flex-direction: column;
+        width: 95%;
+    }
+
+    #profile-zone-left-side, #profile-zone-right-side{
+        width: 95%;
+        padding: unset;
+        margin-bottom: 1rem;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .profile-button {
+
+    }
+
+    .tricks-listing-grid {
+        flex-direction: column;
+        align-content: center;
+        padding-left: initial;
+        width: 90%;
+    }
+
+    .trick-editor-form {
+        width: 90%;
+    }
+
+    #security-form {
+        width: 90%;
+    }
+
+    .modal {
+        width: 90%;
+    }
+
+    .modal-media-gallery {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .modal-image-item {
+        max-width: 8rem;
+    }
+
+    #trick-show-images img {
+        width: 10rem;
+        padding: .3rem;
+        margin-bottom: .7rem;
+    }
+
+    #history-zone {
+        width: 95%;
+    }
+
+    .history-item {
+        width: 100%;
+    }
+
+    .history-title {
+        font-size: 1.6rem;
+    }
+
+    #gallery-view h3 {
+        font-weight: 700;
+    }
+
+    H3 {
+        font-size: 1.50rem;
+    }
+}
+
+@media screen and (min-width: 1023px) and (max-width: 1025px) {
+    .settings-zone-right {
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+}

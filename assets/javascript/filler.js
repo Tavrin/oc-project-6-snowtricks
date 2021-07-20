@@ -39,7 +39,7 @@ class Filler {
         elem.appendChild(button);
 
         button.addEventListener('click', () => {
-            let mediaHiddenInput = document.querySelector('#mediaHiddenInput');
+            let mediaHiddenInput = document.querySelector('#trick_form_mainMedia');
             elem.classList.add('d-n');
             mediaHiddenInput.value = 'none';
         })
