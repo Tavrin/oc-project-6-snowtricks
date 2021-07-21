@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+{% block title %}Snowtricks - Nouvelle figure{% endblock %}
+{% set media = '' %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        const metadata = {
+        {% if trick is defined and trick is not empty %}
+            id: {{ trick.id ?? null }},
+            slug: "{{ trick.slug ?? null }}"
+        {% else %}
+            id: null,
+            slug: null
+        {% endif %}
+        }
+    </script>
+{% endblock %}
+{% if trick.mainMedia is defined and trick.mainMedia is not empty %}
+    {% set media = trick.mainMedia.file ? '/uploads/tricks-images/' ~ trick.mainMedia.file : '' %}
+{% endif %}
+{% block body %}
+    {% include 'partials/inc/media_modal.html.twig' %}
+    <div class="form-zone">
+        {% if trick.id is defined and trick.slug is defined and trick.slug is not empty %}
+            <div class="mb-1">
+                <a class="btn" href="/tricks/{{ trick.slug }}">Voir la figure</a>
+            </div>
+        {% endif %}
+        <h1 class="zone-title">{{ 'edit' == type ? "Editer la figure : " ~ editorForm.name.vars.value : 'Créer une nouvelle figure' }}</h1>
+        {{ form_start(editorForm, {'attr' : {'class' : 'trick-editor-form'}}) }}
+        <div class="form-group">
+            <div style="color: red!important;">{{ form_errors(editorForm.name) }}</div>
+            {{ form_label(editorForm.name, 'Nom de la figure', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(editorForm.name, { attr: {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(editorForm.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(editorForm.description, { attr: {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(editorForm.trickGroup, 'Groupe de figure', {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(editorForm.trickGroup, { attr: {'class': 'form-control'}}) }}
+        </div>
+        <div id="mediaShow" class="js-filler" data-type="image" data-id="previewImage" data-src="{{ media }}"></div>
+        {{ form_widget(editorForm.mainMedia, {'value': media }) }}
+        <div class="editor-media-buttons" {% if trick.id is not defined or trick.id is empty %}style="display:none"{% endif %}>
+        {{ form_rest(editorForm) }}
+        </div>
+        <div class="form-submit">
+            <button type="submit" class="btn">{{ 'new' == type ? 'Créer' : 'Editer'}}</button>
+        </div>
+        {{ form_end(editorForm) }}
+    </div>
+{% endblock %}

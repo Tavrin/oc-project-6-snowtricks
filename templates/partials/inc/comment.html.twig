@@ -1,0 +1,18 @@
+    {% if app.user is defined and app.user is not empty and app.user.isVerified == true %}
+        {{ form_start(commentForm) }}
+        <div class="form-group">
+            <div style="color: red!important;">{{ form_errors(commentForm.content) }}</div>
+            {% if 'type' == 'new' %}
+                {{ form_label(commentForm.content, 'Commentaire', {'label_attr': {'class': 'form-label'}}) }}
+            {% endif %}
+            {{ commentWidget|raw }}
+        </div>
+        <div class="form-submit">
+            <button type="submit" class="btn">{{ type == 'new' ? "Commenter" : "Répondre" }}</button>
+        </div>
+        {{ form_end(commentForm) }}
+    {% elseif app.user is defined and app.user is not empty and app.user.isVerified == false %}
+        Veuillez <a href="/settings">vérifier</a> votre adresse email avant de pouvoir poster des commentaires
+    {% else %}
+        Veuillez vous <a href="/login">connecter</a> ou vous <a href="/register">inscrire</a> pour poster un commentaire
+    {% endif %}

@@ -1,0 +1,37 @@
+<header class="header">
+    <nav class="navbar-container navbar" id="main-navbar">
+        <ul class="navbar" id="navbar-logo">
+            <li>
+                <a href="/" id="logo">Snowtricks</a>
+            </li>
+        </ul>
+        <ul class="navbar" id="navLinks" data-toggle-class="active">
+            <li class="nav-item">
+                <a href="/" class="top-link">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a href="/#tricks-zone" class="top-link">Tricks</a>
+            </li>
+            {% if app.user is defined and app.user is not empty %}
+                <li class="nav-item">
+                    <a href="#" id="userDropdown"><i class="fas fa-user"></i></a>
+                    <ul class="dropdown header" id="userDropdownLinks">
+                        <li><a href="/users/{{ app.user.slug }}" class="">Profil</a></li>
+                        <li><a href="/settings" class="">Paramètres</a></li>
+                        <li><a href="/logout" class="">Déconnexion</a></li>
+                    </ul>
+                </li>
+            {% else %}
+            <li class="nav-item">
+                <a href="/login" class="top-link">Connexion</a>
+            </li>
+            <li class="nav-item">
+                <a href="/register" class="top-link">Inscription</a>
+            </li>
+            {% endif %}
+        </ul>
+        <a id="navDropDown" class="js-toggle" data-target-id="navLinks" data-type="display" href="#">
+            <i class="fas fa-bars"></i>
+        </a>
+    </nav>
+</header>

@@ -1,0 +1,7 @@
+{% if  trick.mainMedia is defined and trick.mainMedia.file is defined and trick.mainMedia.file is not empty%}
+    {% set image = asset('uploads/tricks-images/' ~ trick.mainMedia.file) %}
+{% else %}
+    {% set image = asset('build/images/snowboard-1.jpg') %}
+{% endif %}
+<img src="{{ image }}" alt="" class="listing_media">
+
