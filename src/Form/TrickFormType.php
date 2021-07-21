@@ -10,8 +10,10 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 
 class TrickFormType extends AbstractType
 {
@@ -26,7 +28,12 @@ class TrickFormType extends AbstractType
     {
         $groups = $this->trickManager->setGroups();
         $builder
-            ->add('name')
+            ->add('name', TextType::class,
+                [
+                    'constraints' => [
+                        new Length(['min' => 5, 'max' => 30]),
+                    ],
+                ])
             ->add('description', TextAreaType::class)
             ->add('trickGroup', ChoiceType::class, [
                 'choices' => $groups,
